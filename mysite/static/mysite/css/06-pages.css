@@ -1,0 +1,20 @@
+/* 06-pages.css
+   Target specific page types using the body class set in each template.
+   Pattern: body.page-{page-name} .site-main { ... }                    */
+
+/* Home page — hero often goes full-width, no container padding */
+body.page-home .site-main {
+  padding-block: 0;
+}
+
+/* Blog index and post pages — narrow reading column */
+body.page-blog-index .site-main,
+body.page-blog-post   .site-main {
+  max-width: 48rem;
+  margin-inline: auto;
+}
+
+/* Portfolio page — light grey background */
+body.page-portfolio .site-main {
+  background-color: var(--color-gray-light);
+}

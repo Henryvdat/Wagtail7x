@@ -23,24 +23,57 @@
         <base target="_blank">
         {% endif %}
 
-        {# Global stylesheets #}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/mysite.css' %}">
+        {# Google Fonts — matches the fonts set in 01-settings.css #}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
-        {% block extra_css %}
-        {# Override this in templates to add extra stylesheets #}
-        {% endblock %}
+        {# Main stylesheet — one link, 8 layers internally #}
+        <link rel="stylesheet" type="text/css" href="{% static 'mysite/css/main.css' %}">
+
+        {# Per-page: load a separate CSS file for one page only #}
+        {% block extra_css %}{% endblock %}
+
+        {# Per-page: override CSS variables inline for one page only #}
+        {% block page_theme %}{% endblock %}
     </head>
 
     <body class="{% block body_class %}{% endblock %}">
         {% wagtailuserbar %}
 
-        {% block content %}{% endblock %}
+        {# ══ HEADER ══════════════════════════════════════════ #}
+        <header class="site-header">
+            <div class="container">
+                {% block header %}
+                    {% wagtail_site as current_site %}
+<a href="/" class="site-logo">{{ current_site.site_name }}</a>
+                    <nav class="site-nav" aria-label="Main navigation">
+                        <a href="/">Home</a>
+                        <a href="/blog/">Blog</a>
+                    </nav>
+                {% endblock %}
+            </div>
+        </header>
+
+        {# ══ MAIN CONTENT ════════════════════════════════════ #}
+        <main class="site-main {% block main_class %}{% endblock %}">
+            <div class="container">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+
+        {# ══ FOOTER ══════════════════════════════════════════ #}
+        <footer class="site-footer">
+            <div class="container">
+                {% block footer %}
+                    <p>&copy; {% now "Y" %} Neil Whittaker. Built with Wagtail.</p>
+                {% endblock %}
+            </div>
+        </footer>
 
         {# Global javascript #}
         <script type="text/javascript" src="{% static 'js/mysite.js' %}"></script>
 
-        {% block extra_js %}
-        {# Override this in templates to add extra javascript #}
-        {% endblock %}
+        {% block extra_js %}{% endblock %}
     </body>
 </html>

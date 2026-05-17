@@ -1,0 +1,68 @@
+/* 04-layout.css — structural layout using the theme variables */
+
+/* ── Centred container ──────────────────────────────────── */
+.container {
+  max-width: var(--container-width);
+  margin-inline: auto;
+  padding-inline: var(--space-md);
+}
+
+/* ── Site Header ────────────────────────────────────────── */
+.site-header {
+  background-color: var(--header-bg);
+  color: var(--header-text);
+  font-family: var(--header-font);
+  min-height: var(--header-height);
+  display: flex;
+  align-items: center;
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.site-header a {
+  color: var(--header-link);
+  text-decoration: none;
+  font-weight: 600;
+}
+.site-header a:hover {
+  color: var(--header-link-hover);
+}
+
+.site-logo { font-size: 1.25rem; }
+
+.site-nav {
+  display: flex;
+  gap: var(--space-lg);
+}
+
+/* ── Main Content Area ──────────────────────────────────── */
+.site-main {
+  background-color: var(--body-bg);
+  color: var(--body-text);
+  font-family: var(--body-font);
+  padding-block: var(--space-xl);
+  min-height: 60vh;
+}
+
+/* ── Site Footer ────────────────────────────────────────── */
+.site-footer {
+  background-color: var(--footer-bg);
+  color: var(--footer-text);
+  font-family: var(--footer-font);
+  padding-block: var(--space-xl);
+}
+
+.site-footer a {
+  color: var(--footer-link);
+}
+.site-footer a:hover {
+  color: var(--footer-link-hover);
+}
+
+/* ── Mobile ─────────────────────────────────────────────── */
+@media (max-width: 48

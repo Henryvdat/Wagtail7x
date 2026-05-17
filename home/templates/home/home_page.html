@@ -1,21 +1,27 @@
 {% extends "base.html" %}
-{% load static %}
+{% load wagtailcore_tags %}
 
-{% block body_class %}template-homepage{% endblock %}
+{% block body_class %}page-home{% endblock %}
 
-{% block extra_css %}
-
-{% comment %}
-Delete the line below if you're just getting started and want to remove the welcome screen!
-{% endcomment %}
-<link rel="stylesheet" href="{% static 'css/welcome_page.css' %}">
-{% endblock extra_css %}
+{% block page_theme %}
+<style>
+  :root {
+    --body-bg:   #faf8f4;
+    --body-text: #1a1a1a;
+  }
+</style>
+{% endblock %}
 
 {% block content %}
+    <h1>{{ page.title }}</h1>
 
-{% comment %}
-Delete the line below if you're just getting started and want to remove the welcome screen!
-{% endcomment %}
-{% include 'home/welcome_page.html' %}
+    {% if page.intro %}
+        <p>{{ page.intro }}</p>
+    {% endif %}
 
-{% endblock content %}
+    {% for block in page.body %}
+        <div class="block-{{ block.block_type }}">
+            {% include_block block %}
+        </div>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,68 @@
+/* =============================================================
+   01-settings.css — THEME CONTROL PANEL
+   Edit this file to change the look of the site.
+   Header, Body, and Footer variables are independent.
+   ============================================================= */
+
+:root {
+
+  /* ── Global Colour Palette ─────────────────────────────────
+     Raw colour values. Use the semantic variables below
+     in components — never hard-code these colours directly.  */
+
+  --color-brand-primary:  #1a3a5c;   /* deep navy */
+  --color-brand-accent:   #e07b39;   /* warm orange */
+  --color-white:          #ffffff;
+  --color-black:          #111111;
+  --color-gray-light:     #f5f5f5;
+  --color-gray-mid:       #cccccc;
+  --color-gray-dark:      #555555;
+
+  /* ── Typography ────────────────────────────────────────────
+     Change font names here AND update the Google Fonts link
+     in mysite/templates/base.html to match.                  */
+
+  --font-heading:   'Poppins', 'Segoe UI', sans-serif;
+  --font-body:      'Inter', 'Helvetica Neue', sans-serif;
+  --font-mono:      'JetBrains Mono', 'Fira Code', monospace;
+  --font-size-base: 1rem;
+  --line-height:    1.6;
+
+  /* ── HEADER ─────────────────────────────────────────────────
+     Change ONLY these to restyle the header independently.   */
+
+  --header-bg:         var(--color-brand-primary);
+  --header-text:       var(--color-white);
+  --header-link:       var(--color-white);
+  --header-link-hover: var(--color-brand-accent);
+  --header-font:       var(--font-heading);
+  --header-height:     4rem;
+
+  /* ── BODY / MAIN ────────────────────────────────────────────
+     Change ONLY these to restyle the content area.           */
+
+  --body-bg:           var(--color-white);
+  --body-text:         var(--color-black);
+  --body-link:         var(--color-brand-primary);
+  --body-link-hover:   var(--color-brand-accent);
+  --body-font:         var(--font-body);
+
+  /* ── FOOTER ─────────────────────────────────────────────────
+     Change ONLY these to restyle the footer independently.   */
+
+  --footer-bg:         var(--color-brand-primary);
+  --footer-text:       var(--color-gray-light);
+  --footer-link:       var(--color-brand-accent);
+  --footer-link-hover: var(--color-white);
+  --footer-font:       var(--font-body);
+
+  /* ── Spacing & Layout ───────────────────────────────────── */
+
+  --space-xs:  0.25rem;
+  --space-sm:  0.5rem;
+  --space-md:  1rem;
+  --space-lg:  2rem;
+  --space-xl:  4rem;
+  --container-width: 72rem;
+  --border-radius:   0.375rem;
+}

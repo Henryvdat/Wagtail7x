@@ -1,0 +1,54 @@
+/* 03-base.css — bare HTML elements using the theme variables */
+
+html {
+  font-size: var(--font-size-base);
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--body-bg);
+  color: var(--body-text);
+  font-family: var(--body-font);
+  line-height: var(--line-height);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  line-height: 1.25;
+  color: var(--body-text);
+  margin-bottom: var(--space-sm);
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+
+a {
+  color: var(--body-link);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--body-link-hover);
+  text-decoration: underline;
+}
+
+p { margin-bottom: var(--space-md); }
+
+ul, ol {
+  padding-left: var(--space-lg);
+  margin-bottom: var(--space-md);
+}
+
+code, pre {
+  font-family: var(--font-mono);
+  background: var(--color-gray-light);
+  border-radius: var(--border-radius);
+  padding: 0.1em 0.4em;
+  font-size: 0.9em;
+}
+
+pre {
+  padding: var(--space-md);
+  overflow-x: auto;
+}
