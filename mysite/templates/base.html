@@ -1,4 +1,4 @@
-{% load static wagtailcore_tags wagtailuserbar %}
+{% load static wagtailcore_tags wagtailuserbar wagtailimages_tags menu_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -46,11 +46,8 @@
             <div class="container">
                 {% block header %}
                     {% wagtail_site as current_site %}
-<a href="/" class="site-logo">{{ current_site.site_name }}</a>
-                    <nav class="site-nav" aria-label="Main navigation">
-                        <a href="/">Home</a>
-                        <a href="/blog/">Blog</a>
-                    </nav>
+<a href="/" class="site-logo">{% if settings.home.SiteSettings.header_icon %}{% image settings.home.SiteSettings.header_icon width-40 as hi %}<img src="{{ hi.url }}" alt="" class="site-logo__icon" aria-hidden="true">{% endif %}<span>{{ current_site.site_name }}</span></a>
+                    <nav class="site-nav" aria-label="Main navigation">{% nav_pages as pages %}{% for p in pages %}<a href="{{ p.url }}">{{ p.title }}</a>{% endfor %}</nav>
                 {% endblock %}
             </div>
         </header>
@@ -66,7 +63,7 @@
         <footer class="site-footer">
             <div class="container">
                 {% block footer %}
-                    <p>&copy; {% now "Y" %} Neil Whittaker. Built with Wagtail.</p>
+                    <p>&copy; {% now "Y" %} {% if settings.home.SiteSettings.footer_text %}{{ settings.home.SiteSettings.footer_text }}{% else %}Neil Whittaker. Built with Wagtail.{% endif %}</p>
                 {% endblock %}
             </div>
         </footer>
