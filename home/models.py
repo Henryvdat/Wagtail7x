@@ -15,7 +15,7 @@ from wagtail.contrib.settings.models import BaseSiteSetting, register_setting
 
 
 class HomePage(Page):
-    intro = models.TextField(blank=True)
+    intro = RichTextField(blank=True)
 
     body = StreamField([
 

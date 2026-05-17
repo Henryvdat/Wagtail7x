@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: sans-serif;
+            min-height: 100vh;
+            padding: 3rem 2rem;
+        }
+        .hero-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+        .hero-title p { margin: 0; }
+        .body {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 800px;
+        }
+        .body p { margin-bottom: 1rem; }
+        .body a { color: #ccc; text-decoration: underline; }
+    </style>
+</head>
+<body>
+    {% load wagtailcore_tags %}
+    {% if page.intro %}
+    <div class="hero-title">{{ page.intro|richtext }}</div>
+    {% endif %}
+    {% if page.body %}
+    <div class="body">{{ page.body|richtext }}</div>
+    {% endif %}
+</body>
+</html>

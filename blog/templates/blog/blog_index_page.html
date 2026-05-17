@@ -1,20 +1,39 @@
 {% extends "base.html" %}
 
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags wagtailimages_tags %}
 
 {% block body_class %}template-blogindexpage{% endblock %}
 
 {% block content %}
     <h1>{{ page.title }}</h1>
 
-    <div class="intro">{{ page.intro|richtext }}</div>
+    {% if page.intro %}
+        <div class="intro">{{ page.intro|richtext }}</div>
+    {% endif %}
 
-    {% for post in blogpages %}
-    {% with post=post.specific %}
-        <h2><a href="{% pageurl post %}">{{ post.title }}</a></h2>
-        <p>{{ post.intro }}</p>
-        {{ post.body|richtext }}
-    {% endwith %}
-{% endfor %}
+    {% for block in page.body %}
+        <div class="block-{{ block.block_type }}">
+            {% include_block block %}
+        </div>
+    {% endfor %}
+
+    <div class="blog-listing">
+        {% for post in blogpages %}
+        {% with post=post.specific %}
+            <article class="blog-listing__item">
+                {% if post.main_image %}
+                    {% image post.main_image width-400 as img %}
+                    <img src="{{ img.url }}" alt="{{ img.alt }}">
+                {% endif %}
+                <h2><a href="{% pageurl post %}">{{ post.title }}</a></h2>
+                {% if post.date %}<p class="meta">{{ post.date }}</p>{% endif %}
+                {% if post.intro %}<div class="intro">{{ post.intro|richtext }}</div>{% endif %}
+                <a href="{% pageurl post %}">Read more →</a>
+            </article>
+        {% endwith %}
+        {% empty %}
+            <p>No posts yet.</p>
+        {% endfor %}
+    </div>
 
 {% endblock %}

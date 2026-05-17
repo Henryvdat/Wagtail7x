@@ -13,9 +13,13 @@
         {% image page.main_image width-800 %}
     {% endif %}
 
-    <div class="intro">{{ page.intro }}</div>
+    {% if page.intro %}<div class="intro">{{ page.intro|richtext }}</div>{% endif %}
 
-    {{ page.body|richtext }}
+    {% for block in page.body %}
+        <div class="block-{{ block.block_type }}">
+            {% include_block block %}
+        </div>
+    {% endfor %}
 
     <p><a href="{{ page.get_parent.url }}">Return to blog</a></p>
 
