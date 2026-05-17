@@ -63,7 +63,7 @@
         <footer class="site-footer">
             <div class="container">
                 {% block footer %}
-                    <p>&copy; {% now "Y" %} {% if settings.home.SiteSettings.footer_text %}{{ settings.home.SiteSettings.footer_text }}{% else %}Neil Whittaker. Built with Wagtail.{% endif %}</p>
+                    <div class="site-footer__text">{% if settings.home.SiteSettings.footer_text %}{{ settings.home.SiteSettings.footer_text|richtext }}{% else %}<p>Neil Whittaker. Built with Wagtail.</p>{% endif %}</div>
                 {% endblock %}
             </div>
         </footer>

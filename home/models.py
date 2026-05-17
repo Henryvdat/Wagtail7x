@@ -1,7 +1,7 @@
 from django.db import models
 
 from wagtail.models import Page
-from wagtail.fields import StreamField
+from wagtail.fields import StreamField, RichTextField
 from wagtail.blocks import (
     RichTextBlock,
     CharBlock,
@@ -62,7 +62,7 @@ class HomePage(Page):
 @register_setting
 class SiteSettings(BaseSiteSetting):
     header_icon = models.ForeignKey(get_image_model_string(),null=True,blank=True,on_delete=models.SET_NULL,related_name="+",verbose_name="Header icon")
-    footer_text = models.CharField(max_length=255,blank=True,default="Neil Whittaker. Built with Wagtail.",verbose_name="Footer text")
+    footer_text = RichTextField(blank=True, default="Neil Whittaker. Built with Wagtail.", verbose_name="Footer text")
     panels=[FieldPanel("header_icon"),FieldPanel("footer_text")]
     class Meta:
         verbose_name="Site Settings"
