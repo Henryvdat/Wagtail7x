@@ -1,7 +1,44 @@
 /* 07-blocks.css
    Styles for Wagtail StreamField blocks.
-   Class convention: .block-{block_type_name}
-   In your template: <div class="block-{{ block.block_type }}">  */
+   Each block template renders its own root element — no outer wrapper in page templates.
+   Block type classes are on the block template's root element, e.g. class="block-rich-text block-align--center" */
+
+/* ── Shared block spacing ───────────────────────────────── */
+.block-rich-text,
+.block-image,
+.block-thumbnail,
+.block-quote,
+.block-section,
+.block-columns {
+  margin-block: var(--space-lg);
+}
+
+/* ── Rich text block ────────────────────────────────────── */
+.block-rich-text {
+  line-height: 1.7;
+}
+
+/* ── Pull quote ─────────────────────────────────────────── */
+.block-quote {
+  border-left: 4px solid var(--color-brand-accent);
+  padding: var(--space-md) var(--space-lg);
+  background-color: var(--color-gray-light);
+  font-style: italic;
+}
+
+/* ── Image block ────────────────────────────────────────── */
+.block-image img,
+.block-thumbnail img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+.block-image figcaption,
+.block-thumbnail figcaption {
+  font-size: 0.875rem;
+  color: var(--color-text-muted, #666);
+  margin-top: 0.5rem;
+}
 
 /* ── Hero block ─────────────────────────────────────────── */
 .block-hero {
@@ -15,27 +52,6 @@
   color: var(--color-white);
 }
 
-/* ── Pull quote ─────────────────────────────────────────── */
-.block-quote {
-  border-left: 4px solid var(--color-brand-accent);
-  padding: var(--space-md) var(--space-lg);
-  background-color: var(--color-gray-light);
-  font-style: italic;
-  margin-block: var(--space-lg);
-}
-
-/* ── Image + text side by side ──────────────────────────── */
-.block-image_text {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-lg);
-  align-items: center;
-  margin-block: var(--space-xl);
-}
-@media (max-width: 48rem) {
-  .block-image_text { grid-template-columns: 1fr; }
-}
-
 /* ── Code block ─────────────────────────────────────────── */
 .block-code {
   font-family: var(--font-mono);
@@ -47,19 +63,73 @@
   margin-block: var(--space-lg);
 }
 
-/* ── Themed section: dark ───────────────────────────────── */
+/* ── Section block (always full-width background) ────────── */
+.block-section {
+  padding-block: var(--space-xl);
+}
 .block-section--dark {
   background-color: #1a1a2e;
   color: var(--color-gray-light);
-  padding-block: var(--space-xl);
 }
 .block-section--dark h1,
 .block-section--dark h2,
 .block-section--dark h3 { color: var(--color-white); }
 
-/* ── Themed section: accent ─────────────────────────────── */
 .block-section--accent {
   background-color: var(--color-brand-accent);
   color: var(--color-white);
-  padding-block: var(--space-xl);
+}
+
+/* section inner container — alignment applies here */
+.block-section .container {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* ── Column layouts ─────────────────────────────────────── */
+.block-columns {
+  display: grid;
+  gap: var(--space-lg);
+}
+.block-columns--1-1 { grid-template-columns: 1fr 1fr; }
+.block-columns--2-1 { grid-template-columns: 2fr 1fr; }
+.block-columns--1-2 { grid-template-columns: 1fr 2fr; }
+.block-columns--3   { grid-template-columns: 1fr 1fr 1fr; }
+
+@media (max-width: 48rem) {
+  .block-columns--1-1,
+  .block-columns--2-1,
+  .block-columns--1-2,
+  .block-columns--3 { grid-template-columns: 1fr; }
+}
+
+/* ── Block alignment ────────────────────────────────────── */
+/* Applied to the block's root element (or section's .container).
+   Left/center/right constrain to 60% of available width.
+   Full width = no constraint. */
+.block-align--left {
+  display: block;
+  max-width: 60%;
+  margin-inline-start: 0;
+  margin-inline-end: auto;
+  text-align: left;
+}
+.block-align--center {
+  display: block;
+  max-width: 60%;
+  margin-inline: auto;
+  text-align: center;
+}
+.block-align--right {
+  display: block;
+  max-width: 60%;
+  margin-inline-start: auto;
+  margin-inline-end: 0;
+  text-align: right;
+}
+.block-align--full {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  text-align: left;
 }

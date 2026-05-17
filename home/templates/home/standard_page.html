@@ -1,16 +1,7 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
 
-{% block body_class %}page-home{% endblock %}
-
-{% block page_theme %}
-<style>
-  :root {
-    --body-bg:   #faf8f4;
-    --body-text: #1a1a1a;
-  }
-</style>
-{% endblock %}
+{% block body_class %}page-standard{% endblock %}
 
 {% block content %}
     <h1>{{ page.title }}</h1>

@@ -1,3 +1,4 @@
-<blockquote class="block-quote">
-    {{ value }}
+{% load wagtailcore_tags %}
+<blockquote class="block-quote block-align--{{ value.alignment }}">
+    {{ value.content|richtext }}
 </blockquote>

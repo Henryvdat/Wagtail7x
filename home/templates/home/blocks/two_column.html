@@ -1,0 +1,17 @@
+{% load wagtailcore_tags %}
+<div class="block-columns block-columns--{{ value.layout }}">
+    <div class="block-columns__col">
+        {% for block in value.left %}
+            <div class="block-{{ block.block_type }}">
+                {% include_block block %}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="block-columns__col">
+        {% for block in value.right %}
+            <div class="block-{{ block.block_type }}">
+                {% include_block block %}
+            </div>
+        {% endfor %}
+    </div>
+</div>

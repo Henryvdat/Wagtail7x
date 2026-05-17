@@ -1,5 +1,5 @@
 {% load wagtailimages_tags %}
-<figure class="block-thumbnail">
+<figure class="block-thumbnail block-align--{{ value.alignment }}">
     {% image value.image fill-200x200 as img %}
     <img src="{{ img.url }}" width="{{ img.width }}" height="{{ img.height }}" alt="{{ value.image.title }}">
     {% if value.caption %}<figcaption>{{ value.caption }}</figcaption>{% endif %}

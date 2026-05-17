@@ -16,9 +16,7 @@
     {% if page.intro %}<div class="intro">{{ page.intro|richtext }}</div>{% endif %}
 
     {% for block in page.body %}
-        <div class="block-{{ block.block_type }}">
-            {% include_block block %}
-        </div>
+        {% include_block block %}
     {% endfor %}
 
     <p><a href="{{ page.get_parent.url }}">Return to blog</a></p>
