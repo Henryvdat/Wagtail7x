@@ -46,7 +46,19 @@
             <div class="container">
                 {% block header %}
                     {% wagtail_site as current_site %}
-<a href="/" class="site-logo">{% if settings.home.SiteSettings.header_icon %}{% image settings.home.SiteSettings.header_icon width-40 as hi %}<img src="{{ hi.url }}" alt="" class="site-logo__icon" aria-hidden="true">{% endif %}<span>{{ current_site.site_name }}</span></a>
+                    {% with ss=settings.home.SiteSettings %}
+                    <a href="/" class="site-logo">
+                        {% if ss.header_icon %}
+                            {% image ss.header_icon width-40 as hi %}
+                            <img src="{{ hi.url }}" alt=""
+                                 class="site-logo__icon{% if ss.header_icon_css_classes %} {{ ss.header_icon_css_classes }}{% endif %}"
+                                 aria-hidden="true">
+                        {% endif %}
+                        <span{% if ss.site_name_css_classes %} class="{{ ss.site_name_css_classes }}"{% endif %}>
+                            {% if ss.site_name %}{{ ss.site_name }}{% else %}{{ current_site.site_name }}{% endif %}
+                        </span>
+                    </a>
+                    {% endwith %}
                     <nav class="site-nav" aria-label="Main navigation">{% nav_pages as pages %}{% for p in pages %}<a href="{{ p.url }}">{{ p.title }}</a>{% endfor %}</nav>
                 {% endblock %}
             </div>

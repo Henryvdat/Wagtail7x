@@ -33,7 +33,18 @@
   color: var(--header-link-hover);
 }
 
-.site-logo { font-size: 1.25rem; }
+.site-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.25rem;
+}
+.site-logo__icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: contain;
+  flex-shrink: 0;
+}
 
 .site-nav {
   display: flex;
