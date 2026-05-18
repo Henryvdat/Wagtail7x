@@ -5,6 +5,87 @@ from django.utils.safestring import mark_safe
 from home import views
 
 
+# ── Homepage link at top of admin sidebar ─────────────────────────────────
+
+@hooks.register("insert_global_admin_css")
+def admin_sidebar_home_link_css():
+    return mark_safe("""
+<style>
+/* ── View Site link — sits above the Wagtail bird icon ─────────────────── */
+#wt-home-link {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.6rem 1.1rem;
+    color: #8fa3c4;
+    text-decoration: none;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+    overflow: hidden;
+}
+#wt-home-link:hover {
+    background: rgba(255, 255, 255, 0.07);
+    color: #cdd6f4;
+}
+#wt-home-link .wt-home-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+    line-height: 1;
+}
+#wt-home-link .wt-home-label {
+    opacity: 1;
+    transition: opacity 0.15s;
+    white-space: nowrap;
+}
+/* Hide label when sidebar is collapsed */
+.sidebar--collapsed #wt-home-link .wt-home-label {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+}
+</style>
+""")
+
+
+@hooks.register("insert_global_admin_js")
+def admin_sidebar_home_link_js():
+    return mark_safe("""
+<script>
+(function () {
+    'use strict';
+
+    function injectHomeLink() {
+        if (document.getElementById('wt-home-link')) return;
+        var brand = document.querySelector('a.sidebar-wagtail-branding');
+        if (!brand) return;
+
+        var link = document.createElement('a');
+        link.id = 'wt-home-link';
+        link.href = '/';
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.title = 'View homepage';
+        link.innerHTML =
+            '<span class="wt-home-icon">&#127968;</span>' +
+            '<span class="wt-home-label">View site</span>';
+
+        brand.parentElement.insertBefore(link, brand);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', injectHomeLink);
+    } else {
+        injectHomeLink();
+    }
+})();
+</script>
+""")
+
+
 # ── Stylesheet editor — URL + sidebar entry ───────────────────────────────
 
 @hooks.register("register_admin_urls")
