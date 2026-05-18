@@ -1,5 +1,27 @@
+from django.urls import path
 from wagtail import hooks
+from wagtail.admin.menu import MenuItem
 from django.utils.safestring import mark_safe
+from home import views
+
+
+# ── Stylesheet editor — URL + sidebar entry ───────────────────────────────
+
+@hooks.register("register_admin_urls")
+def register_stylesheet_urls():
+    return [
+        path("stylesheets/", views.stylesheet_editor, name="stylesheet_editor"),
+    ]
+
+
+@hooks.register("register_admin_menu_item")
+def register_stylesheet_menu_item():
+    return MenuItem(
+        "Stylesheets",
+        "/admin/stylesheets/",
+        icon_name="code",
+        order=9500,
+    )
 
 
 @hooks.register("insert_global_admin_css")

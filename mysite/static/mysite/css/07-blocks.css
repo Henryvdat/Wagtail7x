@@ -41,6 +41,69 @@
   margin-top: 0.5rem;
 }
 
+/* Image float — overrides the generic block-align rules so text in adjacent
+   rich-text blocks wraps around the image rather than stacking below it.
+   Only applies to .block-image; other block types keep the margin-inline approach. */
+.block-image.block-align--left {
+  float: left;
+  max-width: 45%;
+  margin-inline: 0 var(--space-lg);
+  margin-block-start: var(--space-xs);
+}
+.block-image.block-align--right {
+  float: right;
+  max-width: 45%;
+  margin-inline: var(--space-lg) 0;
+  margin-block-start: var(--space-xs);
+}
+
+/* Images inserted into RichText via the Draftail editor —
+   Wagtail applies .richtext-image plus an alignment class (left / right / fullwidth).
+   Float these so surrounding text wraps around them within the same rich-text block. */
+.richtext-image.left {
+  float: left;
+  max-width: 45%;
+  margin: 0 var(--space-lg) var(--space-sm) 0;
+  height: auto;
+}
+.richtext-image.right {
+  float: right;
+  max-width: 45%;
+  margin: 0 0 var(--space-sm) var(--space-lg);
+  height: auto;
+}
+.richtext-image.fullwidth {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin-block: var(--space-md);
+}
+
+/* Clearfix on rich-text blocks so the block always expands
+   to contain its floated images (prevents card height collapsing). */
+.block-rich-text::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+/* Structural full-width blocks always clear the float so they
+   start below any floated image rather than beside it. */
+.block-section,
+.block-raw_html {
+  clear: both;
+}
+
+/* Clearfix on the page content container — ensures the container
+   always expands to contain floated children and the footer
+   is never pulled up alongside an image float. */
+.site-main .container::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
 /* ── Hero block ─────────────────────────────────────────── */
 .block-hero {
   background-color: var(--color-brand-primary);

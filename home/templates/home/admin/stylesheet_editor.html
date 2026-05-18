@@ -1,0 +1,505 @@
+{% extends "wagtailadmin/base.html" %}
+
+{% block titletag %}Stylesheet Editor{% endblock %}
+
+{# ── CSS in <head> ────────────────────────────────────────────────────── #}
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+<style>
+  /* Strip Wagtail's content padding so we fill edge-to-edge */
+  .content { padding: 0 !important; overflow: hidden !important; }
+
+  #se-shell {
+    display: flex;
+    overflow: hidden;
+    background: #282a36;
+    /* height set by JS */
+  }
+
+  /* ── Sidebar ───────────────────────────────────────────── */
+  #se-sidebar {
+    width: 180px;
+    flex-shrink: 0;
+    background: #1a1a2e;
+    border-right: 1px solid #2d2d4a;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #se-sidebar-header {
+    padding: 0.55rem 0.75rem;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #6272a4;
+    font-weight: 700;
+    border-bottom: 1px solid #2d2d4a;
+    flex-shrink: 0;
+  }
+
+  /* Category toggle row */
+  .se-cat-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.45rem 0.75rem 0.2rem;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #6272a4;
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    margin-top: 0.2rem;
+    transition: color 0.1s;
+  }
+  .se-cat-toggle:hover { color: #bd93f9; }
+
+  .se-cat-arrow {
+    display: inline-block;
+    font-size: 0.5rem;
+    transition: transform 0.18s;
+    width: 0.65rem;
+    flex-shrink: 0;
+    transform: rotate(90deg); /* open by default */
+  }
+  .se-cat-toggle.collapsed .se-cat-arrow {
+    transform: rotate(0deg);
+  }
+
+  /* File list under a category */
+  .se-cat-files {
+    overflow: hidden;
+    /* height animated by JS */
+  }
+
+  /* Individual file button */
+  .se-file-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.26rem 0.75rem 0.26rem 1.25rem;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: 0.72rem;
+    color: #8888aa;
+    background: none;
+    border: none;
+    border-left: 2px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: background 0.1s, color 0.1s, border-color 0.1s;
+    line-height: 1.6;
+  }
+  .se-file-btn:hover { background: rgba(255,255,255,0.05); color: #cdd6f4; }
+  .se-file-btn.active {
+    background: rgba(80,130,220,0.2);
+    color: #cdd6f4;
+    border-left-color: #89b4fa;
+  }
+
+  /* ── Right panel ───────────────────────────────────────── */
+  #se-panel {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Toolbar */
+  #se-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.42rem 1rem;
+    background: #1e1e2e;
+    border-bottom: 1px solid #2d2d4a;
+    flex-shrink: 0;
+  }
+  #se-filename {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    color: #cdd6f4;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #se-filename em { color: #44476a; font-style: normal; }
+  #se-hint  { font-size: 0.67rem; color: #44476a; flex-shrink: 0; }
+  #se-status {
+    font-size: 0.73rem;
+    min-width: 11rem;
+    text-align: right;
+    color: #6272a4;
+    flex-shrink: 0;
+  }
+  #se-status.ok   { color: #50fa7b; }
+  #se-status.err  { color: #ff5555; }
+  #se-status.busy { color: #f1fa8c; }
+  #se-save-btn {
+    background: #50fa7b;
+    color: #1e1e2e;
+    border: none;
+    padding: 0.3rem 1rem;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  #se-save-btn:hover    { background: #69ff90; }
+  #se-save-btn:disabled { opacity: 0.35; cursor: default; }
+
+  /* Editor area */
+  #se-cm-wrap {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+  }
+  #se-empty {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: #44476a;
+    font-size: 0.9rem;
+    pointer-events: none;
+  }
+  #se-empty-icon { font-size: 2.5rem; }
+
+  /* CodeMirror fills #se-cm-wrap */
+  #se-cm-host {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+  }
+  .CodeMirror {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace !important;
+    font-size: 13px;
+    line-height: 1.65;
+    height: 100% !important;
+  }
+  .CodeMirror-scroll { box-sizing: border-box; }
+</style>
+{% endblock %}
+
+{# ── HTML content ─────────────────────────────────────────────────────── #}
+{% block content %}
+
+<div id="se-shell">
+
+  <nav id="se-sidebar" aria-label="Stylesheets">
+    <div id="se-sidebar-header">🎨 Stylesheets</div>
+    <div id="se-file-list"></div>
+  </nav>
+
+  <div id="se-panel">
+    <div id="se-toolbar">
+      <span id="se-filename"><em>← Select a stylesheet</em></span>
+      <span id="se-hint">⌘S / Ctrl+S to save</span>
+      <span id="se-status"></span>
+      <button id="se-save-btn" disabled>Save</button>
+    </div>
+    <div id="se-cm-wrap">
+      <div id="se-empty">
+        <span id="se-empty-icon">🎨</span>
+        <span>Choose a stylesheet from the sidebar</span>
+      </div>
+      <div id="se-cm-host"></div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
+
+{# ── JS at end of body ────────────────────────────────────────────────── #}
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/comment/comment.min.js"></script>
+
+<script>
+(function () {
+  'use strict';
+
+  /* Data injected by Django view — accessed after DOM is ready */
+  var SE_TREE = {{ tree_json|safe }};
+  var SE_URL  = "{{ request.path }}";
+  var SE_CSRF = "{{ csrf_token }}";
+
+  // ── Category definitions ─────────────────────────────────────────
+  var CATS = [
+    { label: 'Entry point',  test: function(r){ return r === 'main.css'; } },
+    { label: 'Theme',        test: function(r){ return /^01-/.test(r); } },
+    { label: 'Reset',        test: function(r){ return /^02-/.test(r); } },
+    { label: 'Base',         test: function(r){ return /^03-/.test(r); } },
+    { label: 'Layout',       test: function(r){ return /^04-/.test(r); } },
+    { label: 'Components',   test: function(r){ return /^05-/.test(r); } },
+    { label: 'Pages',        test: function(r){ return /^06-/.test(r); } },
+    { label: 'Blocks',       test: function(r){ return /^07-/.test(r); } },
+    { label: 'Utilities',    test: function(r){ return /^08-/.test(r); } },
+    { label: 'Page CSS',     test: function(r){ return r.indexOf('/') !== -1; } },
+  ];
+
+  // ── Flatten tree JSON ────────────────────────────────────────────
+  function flattenTree(nodes) {
+    var out = [];
+    nodes.forEach(function(n) {
+      if (n.type === 'file') {
+        out.push({ rel: n.rel, name: n.name });
+      } else if (n.type === 'dir' && n.children) {
+        n.children.forEach(function(c) {
+          out.push({ rel: c.rel, name: c.rel });
+        });
+      }
+    });
+    return out;
+  }
+
+  // ── Build collapsible sidebar ────────────────────────────────────
+  function buildSidebar(flat) {
+    var listEl = document.getElementById('se-file-list');
+    var used = {};
+
+    CATS.forEach(function(cat) {
+      var matches = flat.filter(function(f) {
+        return !used[f.rel] && cat.test(f.rel);
+      });
+      if (!matches.length) return;
+      matches.forEach(function(f) { used[f.rel] = true; });
+
+      var section = makeSection(cat.label, matches);
+      listEl.appendChild(section.toggle);
+      listEl.appendChild(section.filesDiv);
+    });
+
+    // Uncategorised remainder
+    var leftover = flat.filter(function(f) { return !used[f.rel]; });
+    if (leftover.length) {
+      var section = makeSection('Other', leftover);
+      listEl.appendChild(section.toggle);
+      listEl.appendChild(section.filesDiv);
+    }
+  }
+
+  function makeSection(label, files) {
+    // Category toggle button
+    var toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'se-cat-toggle';
+    toggle.innerHTML =
+      '<span class="se-cat-arrow">▶</span>' +
+      '<span>' + label + '</span>';
+
+    // Files container
+    var filesDiv = document.createElement('div');
+    filesDiv.className = 'se-cat-files';
+
+    files.forEach(function(f) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'se-file-btn';
+      btn.textContent = f.name;
+      btn.title = f.rel;
+      btn.dataset.rel = f.rel;
+      btn.addEventListener('click', function() { loadFile(f.rel); });
+      filesDiv.appendChild(btn);
+    });
+
+    // Collapse/expand toggle
+    toggle.addEventListener('click', function() {
+      var isOpen = !toggle.classList.contains('collapsed');
+      if (isOpen) {
+        filesDiv.style.height = filesDiv.scrollHeight + 'px';
+        requestAnimationFrame(function() {
+          filesDiv.style.transition = 'height 0.18s ease';
+          filesDiv.style.height = '0px';
+        });
+        toggle.classList.add('collapsed');
+      } else {
+        filesDiv.style.transition = 'height 0.18s ease';
+        filesDiv.style.height = filesDiv.scrollHeight + 'px';
+        toggle.classList.remove('collapsed');
+        filesDiv.addEventListener('transitionend', function handler() {
+          filesDiv.style.height = '';
+          filesDiv.removeEventListener('transitionend', handler);
+        });
+      }
+    });
+
+    return { toggle: toggle, filesDiv: filesDiv };
+  }
+
+  // ── Set shell height to fill viewport ───────────────────────────
+  function resizeShell() {
+    var shell = document.getElementById('se-shell');
+    if (!shell) return;
+    var top = shell.getBoundingClientRect().top + window.scrollY;
+    shell.style.height = (window.innerHeight - top - 2) + 'px';
+    if (editor) editor.refresh();
+  }
+
+  // ── State ────────────────────────────────────────────────────────
+  var editor      = null;
+  var currentFile = null;
+  var isDirty     = false;
+
+  // ── Load file via AJAX ───────────────────────────────────────────
+  function loadFile(rel) {
+    var filenameEl = document.getElementById('se-filename');
+    var statusEl   = document.getElementById('se-status');
+    var saveBtn    = document.getElementById('se-save-btn');
+    var emptyEl    = document.getElementById('se-empty');
+    var cmHost     = document.getElementById('se-cm-host');
+
+    if (isDirty && currentFile) {
+      if (!confirm('Unsaved changes in ' + currentFile + '. Discard?')) return;
+    }
+    setStatus('Loading…', 'busy');
+
+    fetch(SE_URL + '?file=' + encodeURIComponent(rel), {
+      headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.error) { setStatus(data.error, 'err'); return; }
+      currentFile = rel;
+
+      if (!editor) {
+        // Hide placeholder
+        emptyEl.style.display = 'none';
+
+        editor = CodeMirror(cmHost, {
+          mode: 'css',
+          theme: 'dracula',
+          lineNumbers: true,
+          autoCloseBrackets: true,
+          tabSize: 2,
+          indentWithTabs: false,
+          lineWrapping: false,
+          extraKeys: {
+            'Ctrl-S': function() { saveFile(); },
+            'Cmd-S':  function() { saveFile(); },
+            'Ctrl-/': 'toggleComment',
+            'Cmd-/':  'toggleComment',
+          }
+        });
+
+        editor.on('change', function() {
+          isDirty = true;
+          updateFilename();
+        });
+
+        window.addEventListener('resize', function() {
+          resizeShell();
+        });
+      }
+
+      editor.setValue(data.content);
+      editor.clearHistory();
+      isDirty = false;
+
+      // Mark active file in sidebar
+      document.querySelectorAll('.se-file-btn').forEach(function(b) {
+        b.classList.toggle('active', b.dataset.rel === rel);
+      });
+
+      updateFilename();
+      saveBtn.disabled = false;
+      setStatus('', '');
+
+      // Refresh after layout settles
+      setTimeout(function() { editor.refresh(); }, 50);
+    })
+    .catch(function(e) { setStatus('Load error: ' + e, 'err'); });
+  }
+
+  // ── Save ─────────────────────────────────────────────────────────
+  function saveFile() {
+    var statusEl = document.getElementById('se-status');
+    var saveBtn  = document.getElementById('se-save-btn');
+    if (!editor || !currentFile) return;
+    saveBtn.disabled = true;
+    setStatus('Saving…', 'busy');
+
+    fetch(SE_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': SE_CSRF,
+      },
+      body: JSON.stringify({ file: currentFile, content: editor.getValue() })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      saveBtn.disabled = false;
+      if (data.ok) {
+        isDirty = false;
+        updateFilename();
+        setStatus('✓ ' + (data.message || 'Saved'), 'ok');
+        setTimeout(function() { setStatus('', ''); }, 5000);
+      } else {
+        setStatus('✗ ' + (data.error || 'Save failed'), 'err');
+      }
+    })
+    .catch(function() {
+      saveBtn.disabled = false;
+      setStatus('✗ Network error', 'err');
+    });
+  }
+
+  // ── Helpers ──────────────────────────────────────────────────────
+  function setStatus(msg, cls) {
+    var el = document.getElementById('se-status');
+    if (!el) return;
+    el.textContent = msg;
+    el.className = cls || '';
+  }
+
+  function updateFilename() {
+    var el = document.getElementById('se-filename');
+    if (!el) return;
+    if (!currentFile) { el.innerHTML = '<em>← Select a stylesheet</em>'; return; }
+    el.textContent = currentFile + (isDirty ? '  ●' : '');
+  }
+
+  // ── Boot — wait for DOM ready ────────────────────────────────────
+  function init() {
+    var saveBtn = document.getElementById('se-save-btn');
+    if (saveBtn) {
+      saveBtn.addEventListener('click', saveFile);
+    }
+
+    window.addEventListener('beforeunload', function(e) {
+      if (isDirty) { e.preventDefault(); e.returnValue = ''; }
+    });
+
+    var flat = flattenTree(SE_TREE);
+    buildSidebar(flat);
+    resizeShell();
+    window.addEventListener('resize', resizeShell);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+})();
+</script>
+{% endblock %}

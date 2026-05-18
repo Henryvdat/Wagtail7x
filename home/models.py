@@ -12,8 +12,15 @@ from .blocks import STANDARD_BLOCKS
 class HomePage(Page):
     intro = RichTextField(blank=True)
     body = StreamField(STANDARD_BLOCKS, use_json_field=True, blank=True)
+    title_css_classes = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name="Title CSS classes",
+        help_text="Space-separated CSS classes to apply to the page title <h1>, e.g. 'text-hero text-center u-color-accent'",
+    )
 
     content_panels = Page.content_panels + [
+        FieldPanel('title_css_classes'),
         FieldPanel('intro'),
         FieldPanel('body'),
     ]

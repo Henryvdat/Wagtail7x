@@ -1,8 +1,28 @@
 {% extends "base.html" %}
 
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load static wagtailcore_tags wagtailimages_tags %}
 
-{% block body_class %}template-blogindexpage{% endblock %}
+{% block body_class %}page-blog-index{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'mysite/css/pages/blog.css' %}">
+{% endblock %}
+
+{% block page_theme %}
+<style>
+  /* Blog section — warm editorial theme override
+     Overrides the default navy/orange palette from 01-settings.css */
+  :root {
+    --header-bg:          #2d4a3e;   /* forest green */
+    --header-link-hover:  #f5c87a;   /* warm gold */
+    --body-bg:            #faf7f2;   /* warm linen */
+    --body-text:          #2c2416;   /* warm near-black */
+    --body-link:          #2d4a3e;   /* forest green */
+    --body-link-hover:    #c8813a;   /* warm amber */
+    --footer-bg:          #2d4a3e;   /* forest green */
+  }
+</style>
+{% endblock %}
 
 {% block content %}
     <h1>{{ page.title }}</h1>

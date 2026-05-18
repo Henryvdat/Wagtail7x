@@ -1,9 +1,27 @@
 {% extends "base.html" %}
 
-{% load wagtailcore_tags %}
-{% load wagtailimages_tags %}
+{% load static wagtailcore_tags wagtailimages_tags %}
 
-{% block body_class %}template-blogpage{% endblock %}
+{% block body_class %}page-blog-post{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'mysite/css/pages/blog.css' %}">
+{% endblock %}
+
+{% block page_theme %}
+<style>
+  /* Blog post — same warm editorial theme as blog index */
+  :root {
+    --header-bg:          #2d4a3e;
+    --header-link-hover:  #f5c87a;
+    --body-bg:            #faf7f2;
+    --body-text:          #2c2416;
+    --body-link:          #2d4a3e;
+    --body-link-hover:    #c8813a;
+    --footer-bg:          #2d4a3e;
+  }
+</style>
+{% endblock %}
 
 {% block content %}
     <h1>{{ page.title }}</h1>
