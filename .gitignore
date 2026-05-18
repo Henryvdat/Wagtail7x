@@ -26,3 +26,4 @@ env/
 # Static files (collected)
 staticfiles/
 static_collected/
+db.sqlite3
