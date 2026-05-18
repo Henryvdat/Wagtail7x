@@ -9,8 +9,9 @@
 .block-thumbnail,
 .block-quote,
 .block-section,
-.block-columns {
-  margin-block: var(--space-lg);
+.block-columns,
+.block-raw_html {
+  margin-block: var(--space-md);
 }
 
 /* ── Rich text block ────────────────────────────────────── */
@@ -89,7 +90,7 @@
 /* ── Column layouts ─────────────────────────────────────── */
 .block-columns {
   display: grid;
-  gap: var(--space-lg);
+  gap: var(--space-md);
 }
 .block-columns--1-1 { grid-template-columns: 1fr 1fr; }
 .block-columns--2-1 { grid-template-columns: 2fr 1fr; }
@@ -101,6 +102,48 @@
   .block-columns--2-1,
   .block-columns--1-2,
   .block-columns--3 { grid-template-columns: 1fr; }
+}
+
+/* Blocks inside a column: remove the outer margin-block (column gap handles spacing).
+   Add a small top margin between stacked blocks within the same column. */
+.block-columns__col > * {
+  margin-block: 0;
+}
+.block-columns__col > * + * {
+  margin-block-start: var(--space-sm);
+}
+
+/* Inside a column, alignment only controls text direction —
+   max-width/margin overrides are reset so content fills the column. */
+.block-columns__col .block-align--left,
+.block-columns__col .block-align--center,
+.block-columns__col .block-align--right,
+.block-columns__col .block-align--full {
+  max-width: 100%;
+  width: 100%;
+  margin-inline: 0;
+}
+
+/* ── Block style options (card / border / background) ───── */
+
+/* Card: white background, rounded corners, soft shadow, padding */
+.block--card {
+  background: var(--color-white);
+  border-radius: var(--border-radius, 0.375rem);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+  padding: var(--space-md);
+}
+
+/* Border: outline with optional colour override via inline style */
+.block--border {
+  border: 2px solid var(--color-gray-mid, #ccc);
+  border-radius: var(--border-radius, 0.375rem);
+  padding: var(--space-md);
+}
+
+/* Card + border together: border wins over box-shadow */
+.block--card.block--border {
+  box-shadow: none;
 }
 
 /* ── Block alignment ────────────────────────────────────── */

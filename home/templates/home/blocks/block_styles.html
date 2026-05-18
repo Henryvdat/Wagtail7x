@@ -1,0 +1,6 @@
+{# block_styles.html
+   Usage: {% include "home/blocks/block_styles.html" with styles=value.styles base_class="block-rich-text" alignment=value.alignment %}
+   Outputs an opening <div> tag with all style classes and inline styles applied.
+   Partner tag: </div> in the calling template closes it.
+#}
+{% with s=styles %}<div class="{{ base_class }} block-align--{{ alignment }}{% if s.card %} block--card{% endif %}{% if s.border %} block--border{% endif %}{% if s.custom_classes %} {{ s.custom_classes }}{% endif %}"{% if s.background or s.border_color %} style="{% if s.background %}background:{{ s.background }};{% endif %}{% if s.border and s.border_color %}border-color:{{ s.border_color }};{% endif %}"{% endif %}>{% endwith %}

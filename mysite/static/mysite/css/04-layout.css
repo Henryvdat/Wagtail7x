@@ -54,7 +54,13 @@
   background-color: var(--footer-bg);
   color: var(--footer-text);
   font-family: var(--footer-font);
-  padding-block: var(--space-xl);
+  padding-block: var(--space-sm);
+}
+
+/* Kill paragraph bottom margin inside the footer so richtext output
+   doesn't add unwanted space below the last line */
+.site-footer p {
+  margin-bottom: 0;
 }
 
 .site-footer a {

@@ -1,4 +1,6 @@
 {% load wagtailcore_tags %}
-<blockquote class="block-quote block-align--{{ value.alignment }}">
+{% with s=value.styles %}
+<div class="block-quote block-align--{{ value.alignment }}{% if s.card %} block--card{% endif %}{% if s.border %} block--border{% endif %}{% if s.custom_classes %} {{ s.custom_classes }}{% endif %}"{% if s.background or s.text_color or s.border_color %} style="{% if s.background %}background:{{ s.background }};{% endif %}{% if s.text_color %}color:{{ s.text_color }};{% endif %}{% if s.border and s.border_color %}border-color:{{ s.border_color }};{% endif %}"{% endif %}>
     {{ value.content|richtext }}
-</blockquote>
+</div>
+{% endwith %}

@@ -1,9 +1,11 @@
 from wagtail.blocks import (
-    RichTextBlock,
+    BooleanBlock,
     CharBlock,
-    StructBlock,
     ChoiceBlock,
+    RawHTMLBlock,
+    RichTextBlock,
     StreamBlock,
+    StructBlock,
 )
 from wagtail.images.blocks import ImageChooserBlock
 
@@ -15,9 +17,33 @@ ALIGNMENT_CHOICES = [
 ]
 
 
+class BlockStylesBlock(StructBlock):
+    """
+    Reusable style options embedded in every block.
+    Renders as a collapsible group at the bottom of each block in the admin.
+    """
+    card         = BooleanBlock(required=False, label='Card style',
+                                help_text='White background, rounded corners, drop shadow')
+    background   = CharBlock(required=False, label='Background colour',
+                             help_text='Any CSS colour — e.g. #f0f4ff, tomato, rgba(0,0,0,0.05)')
+    text_color   = CharBlock(required=False, label='Text colour',
+                             help_text='Any CSS colour — e.g. white, #333, rgba(0,0,0,0.8)')
+    border       = BooleanBlock(required=False, label='Add border')
+    border_color = CharBlock(required=False, label='Border colour',
+                             help_text='Leave blank for default grey — e.g. #e07b39')
+    custom_classes = CharBlock(required=False, label='Extra CSS classes',
+                               help_text='Class names defined in your CSS files, without the dot — e.g. "highlight" for .highlight { }. Define custom classes in mysite/static/mysite/css/. Multiple classes: "highlight bold-text"')
+
+    class Meta:
+        icon  = 'cog'
+        label = 'Block styles'
+        form_classname = 'block-styles-struct'
+
+
 class RichTextAlignedBlock(StructBlock):
     alignment = ChoiceBlock(choices=ALIGNMENT_CHOICES, default='full', required=False)
-    content = RichTextBlock()
+    content   = RichTextBlock()
+    styles    = BlockStylesBlock(required=False, label='Block styles')
 
     class Meta:
         template = 'home/blocks/rich_text.html'
@@ -26,9 +52,10 @@ class RichTextAlignedBlock(StructBlock):
 
 
 class ImageAlignedBlock(StructBlock):
-    image = ImageChooserBlock()
-    caption = CharBlock(required=False)
+    image     = ImageChooserBlock()
+    caption   = CharBlock(required=False)
     alignment = ChoiceBlock(choices=ALIGNMENT_CHOICES, default='full', required=False)
+    styles    = BlockStylesBlock(required=False, label='Block styles')
 
     class Meta:
         template = 'home/blocks/image.html'
@@ -37,9 +64,10 @@ class ImageAlignedBlock(StructBlock):
 
 
 class ThumbnailAlignedBlock(StructBlock):
-    image = ImageChooserBlock()
-    caption = CharBlock(required=False)
+    image     = ImageChooserBlock()
+    caption   = CharBlock(required=False)
     alignment = ChoiceBlock(choices=ALIGNMENT_CHOICES, default='left', required=False)
+    styles    = BlockStylesBlock(required=False, label='Block styles')
 
     class Meta:
         template = 'home/blocks/thumbnail.html'
@@ -48,8 +76,9 @@ class ThumbnailAlignedBlock(StructBlock):
 
 
 class QuoteAlignedBlock(StructBlock):
-    content = RichTextBlock()
+    content   = RichTextBlock()
     alignment = ChoiceBlock(choices=ALIGNMENT_CHOICES, default='center', required=False)
+    styles    = BlockStylesBlock(required=False, label='Block styles')
 
     class Meta:
         template = 'home/blocks/quote.html'
@@ -58,14 +87,15 @@ class QuoteAlignedBlock(StructBlock):
 
 
 class SectionBlock(StructBlock):
-    heading = CharBlock()
-    body = RichTextBlock()
-    theme = ChoiceBlock(choices=[
+    heading   = CharBlock()
+    body      = RichTextBlock()
+    theme     = ChoiceBlock(choices=[
         ('default', 'Default'),
         ('dark',    'Dark'),
         ('accent',  'Accent'),
     ], default='default')
     alignment = ChoiceBlock(choices=ALIGNMENT_CHOICES, default='full', required=False)
+    styles    = BlockStylesBlock(required=False, label='Block styles')
 
     class Meta:
         template = 'home/blocks/section.html'
@@ -76,9 +106,10 @@ class SectionBlock(StructBlock):
 # Blocks available inside columns (no nesting columns within columns)
 class ColumnContentBlock(StreamBlock):
     rich_text = RichTextAlignedBlock()
-    image = ImageAlignedBlock()
+    image     = ImageAlignedBlock()
     thumbnail = ThumbnailAlignedBlock()
-    quote = QuoteAlignedBlock()
+    quote     = QuoteAlignedBlock()
+    raw_html  = RawHTMLBlock(label='Raw HTML', icon='code')
 
     class Meta:
         icon = 'placeholder'
@@ -90,8 +121,9 @@ class TwoColumnBlock(StructBlock):
         ('2-1', '66% / 33%'),
         ('1-2', '33% / 66%'),
     ], default='1-1', label='Column ratio')
-    left = ColumnContentBlock()
-    right = ColumnContentBlock()
+    left   = ColumnContentBlock()
+    right  = ColumnContentBlock()
+    styles = BlockStylesBlock(required=False, label='Block styles')
 
     class Meta:
         template = 'home/blocks/two_column.html'
@@ -100,9 +132,10 @@ class TwoColumnBlock(StructBlock):
 
 
 class ThreeColumnBlock(StructBlock):
-    left = ColumnContentBlock()
+    left   = ColumnContentBlock()
     center = ColumnContentBlock()
-    right = ColumnContentBlock()
+    right  = ColumnContentBlock()
+    styles = BlockStylesBlock(required=False, label='Block styles')
 
     class Meta:
         template = 'home/blocks/three_column.html'
@@ -119,4 +152,5 @@ STANDARD_BLOCKS = [
     ('section',      SectionBlock()),
     ('two_columns',  TwoColumnBlock()),
     ('three_columns', ThreeColumnBlock()),
+    ('raw_html',     RawHTMLBlock(label='Raw HTML', icon='code')),
 ]

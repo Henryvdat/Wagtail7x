@@ -1,6 +1,10 @@
 {% load wagtailimages_tags %}
-<figure class="block-image block-align--{{ value.alignment }}">
-    {% image value.image max-1200x900 as img %}
-    <img src="{{ img.url }}" width="{{ img.width }}" height="{{ img.height }}" alt="{{ value.image.title }}" style="max-width: 100%; height: auto;">
-    {% if value.caption %}<figcaption>{{ value.caption }}</figcaption>{% endif %}
-</figure>
+{% with s=value.styles %}
+<div class="block-image block-align--{{ value.alignment }}{% if s.card %} block--card{% endif %}{% if s.border %} block--border{% endif %}{% if s.custom_classes %} {{ s.custom_classes }}{% endif %}"{% if s.background or s.text_color or s.border_color %} style="{% if s.background %}background:{{ s.background }};{% endif %}{% if s.text_color %}color:{{ s.text_color }};{% endif %}{% if s.border and s.border_color %}border-color:{{ s.border_color }};{% endif %}"{% endif %}>
+    <figure>
+        {% image value.image max-1200x900 as img %}
+        <img src="{{ img.url }}" width="{{ img.width }}" height="{{ img.height }}" alt="{{ value.image.title }}" style="max-width:100%;height:auto;">
+        {% if value.caption %}<figcaption>{{ value.caption }}</figcaption>{% endif %}
+    </figure>
+</div>
+{% endwith %}

@@ -165,6 +165,26 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 10_000
 
 WAGTAIL_SITE_NAME = "mysite"
 
+# Rich text editor — enable a full feature set including H1.
+# Wagtail's built-in defaults omit H1 (it assumes the page title is the only H1).
+# This setting applies to both RichTextField (model fields) and RichTextBlock (StreamField).
+WAGTAILADMIN_RICH_TEXT_EDITORS = {
+    "default": {
+        "WIDGET": "wagtail.admin.rich_text.DraftailRichTextArea",
+        "OPTIONS": {
+            "features": [
+                "h1", "h2", "h3", "h4", "h5", "h6",
+                "bold", "italic", "strikethrough",
+                "ol", "ul",
+                "blockquote",
+                "link", "document-link",
+                "image",
+                "hr",
+            ],
+        },
+    },
+}
+
 # Search
 # https://docs.wagtail.org/en/stable/topics/search/backends.html
 WAGTAILSEARCH_BACKENDS = {
