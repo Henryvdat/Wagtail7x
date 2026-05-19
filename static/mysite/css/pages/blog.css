@@ -15,8 +15,8 @@
 }
 
 .blog-listing__item {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: var(--space-sm);
   padding: var(--space-lg);
   background: var(--color-white);
@@ -30,24 +30,35 @@
   transform: translateY(-2px);
 }
 
-/* Two-column layout when the card has an image */
-.blog-listing__item img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
+/* Thumbnail wrapper — holds the image + optional background colour.
+   CSS Grid with place-items: start keeps the image at its natural size
+   so background is visible in any space the image doesn't cover. */
+.blog-listing__thumb {
+  display: grid;
+  place-items: start;
+  flex-shrink: 0;
+  width: 240px;
+  min-height: 80px;
   border-radius: calc(var(--border-radius) - 2px);
-  display: block;
+  overflow: hidden;
 }
 
-@media (min-width: 640px) {
-  .blog-listing__item:has(img) {
-    grid-template-columns: 240px 1fr;
-    align-items: start;
-  }
+/* Base image rule — natural size, never upscaled */
+.blog-listing__item img {
+  display: block;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  border-radius: 0;
+}
 
-  .blog-listing__item:has(img) img {
-    height: 160px;
-  }
+/* Body wrapper — stacks title / date / intro / read-more in a column */
+.blog-listing__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  flex: 1;
+  min-width: 0;
 }
 
 .blog-listing__item h2 {
@@ -76,16 +87,89 @@
   margin: 0;
 }
 
-.blog-listing__item > a:last-child {
+.blog-listing__body > a:last-child {
   font-weight: 600;
   font-size: 0.875rem;
   color: var(--body-link);
   text-decoration: none;
   letter-spacing: 0.02em;
+  margin-block-start: auto;
 }
 
-.blog-listing__item > a:last-child:hover {
+.blog-listing__body > a:last-child:hover {
   color: var(--body-link-hover);
+}
+
+
+/* ── Card style: Index Card (default — stacked) ───────────── */
+/* No extra rules needed; the base flex-column layout is Index Card.
+   On mobile the thumb is full-width so cap it there too. */
+.blog-listing--index_card .blog-listing__thumb {
+  width: 100%;
+}
+
+
+/* ── Card style: Double-Column with Image ─────────────────── */
+/* Thumb is flush against the card edge (no padding on that side).
+   It stretches the full card height, and is only as wide as the image. */
+
+@media (min-width: 640px) {
+  .blog-listing--double_column .blog-listing__item--has-image {
+    flex-direction: row;
+    align-items: stretch;   /* thumb stretches full card height */
+    padding: 0;             /* padding moved to body so thumb reaches edges */
+    overflow: hidden;       /* card border-radius clips the thumb corners */
+  }
+
+  .blog-listing--double_column .blog-listing__item--has-image .blog-listing__thumb {
+    width: auto;            /* shrinks to natural image width */
+    min-height: unset;
+    border-radius: 0;       /* card overflow:hidden handles corner clipping */
+  }
+
+  .blog-listing--double_column .blog-listing__item--has-image .blog-listing__body {
+    padding: var(--space-lg);
+  }
+}
+
+
+/* ── Blog Index — flush subheader: remove site-main top padding ── */
+
+.blog-index-main {
+  padding-block-start: 0;
+}
+
+/* ── Blog Index — subheader strip ────────────────────────── */
+
+.blog-subheader {
+  /* Naturally full-width — lives outside .container in base.html */
+  width: 100%;
+  padding: var(--space-lg) var(--space-md);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.blog-subheader__image {
+  display: block;
+  max-width: 600px;
+  width: 100%;
+  height: auto;
+  border-radius: var(--border-radius);
+}
+
+/* ── Blog Index — intro text below subheader ─────────────── */
+
+.blog-subheader-text {
+  margin-block: var(--space-lg);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--body-text);
+}
+
+.blog-subheader-text p:first-child {
+  margin-block-start: 0;
 }
 
 
@@ -100,11 +184,12 @@
   text-transform: uppercase;
 }
 
-/* Hero image at the top of a post */
+/* Hero image at the top of a post — never upscaled */
 body.page-blog-post .site-main img:first-of-type {
-  width: 100%;
-  max-height: 420px;
-  object-fit: cover;
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
   border-radius: var(--border-radius);
   margin-block-end: var(--space-lg);
 }
@@ -114,8 +199,6 @@ body.page-blog-post .intro {
   font-size: 1.125rem;
   line-height: 1.7;
   color: var(--color-gray-dark);
-  border-left: 3px solid var(--color-brand-accent, #c8813a);
-  padding-inline-start: var(--space-md);
   margin-block: var(--space-md) var(--space-lg);
 }
 

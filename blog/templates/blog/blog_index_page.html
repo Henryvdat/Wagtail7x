@@ -3,6 +3,7 @@
 {% load static wagtailcore_tags wagtailimages_tags %}
 
 {% block body_class %}page-blog-index{% endblock %}
+{% block main_class %}blog-index-main{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'mysite/css/pages/blog.css' %}">
@@ -24,29 +25,55 @@
 </style>
 {% endblock %}
 
-{% block content %}
-    <h1>{{ page.title }}</h1>
+{# ── Subheader strip — lives OUTSIDE .container so it's naturally full-width ── #}
+{% block precontent %}
+    <div class="blog-subheader"
+         style="background-color: {{ page.subheader_bg_color|default:'#2d4a3e' }};">
+        {% if page.subheader_image %}
+            {% image page.subheader_image width-600 as sub_img %}
+            <img class="blog-subheader__image"
+                 src="{{ sub_img.url }}"
+                 alt="{{ sub_img.alt }}">
+        {% endif %}
+    </div>
+{% endblock %}
 
+{% block content %}
+
+    {# ── Intro text (below the strip, above the post listing) ── #}
+    {% if page.subheader_text %}
+    <div class="blog-subheader-text">
+        {{ page.subheader_text|richtext }}
+    </div>
+    {% endif %}
+
+    {# ── Legacy intro field ── #}
     {% if page.intro %}
         <div class="intro">{{ page.intro|richtext }}</div>
     {% endif %}
 
+    {# ── StreamField body blocks ── #}
     {% for block in page.body %}
         {% include_block block %}
     {% endfor %}
 
-    <div class="blog-listing">
+    {# ── Blog post listing — card_style drives the modifier class ── #}
+    <div class="blog-listing blog-listing--{{ page.card_style|default:'index_card' }}">
         {% for post in blogpages %}
         {% with post=post.specific %}
-            <article class="blog-listing__item">
+            <article class="blog-listing__item{% if post.main_image %} blog-listing__item--has-image{% endif %}">
                 {% if post.main_image %}
-                    {% image post.main_image width-400 as img %}
-                    <img src="{{ img.url }}" alt="{{ img.alt }}">
+                    {% image post.main_image max-240x240 as img %}
+                    <div class="blog-listing__thumb"{% if page.card_image_bg_color %} style="background-color: {{ page.card_image_bg_color }};"{% endif %}>
+                        <img src="{{ img.url }}" alt="{{ img.alt }}">
+                    </div>
                 {% endif %}
-                <h2><a href="{% pageurl post %}">{{ post.title }}</a></h2>
-                {% if post.date %}<p class="meta">{{ post.date }}</p>{% endif %}
-                {% if post.intro %}<div class="intro">{{ post.intro|richtext }}</div>{% endif %}
-                <a href="{% pageurl post %}">Read more →</a>
+                <div class="blog-listing__body">
+                    <h2><a href="{% pageurl post %}">{{ post.title }}</a></h2>
+                    {% if post.date %}<p class="meta">{{ post.date }}</p>{% endif %}
+                    {% if post.intro %}<div class="intro">{{ post.intro|richtext }}</div>{% endif %}
+                    <a href="{% pageurl post %}">Read more →</a>
+                </div>
             </article>
         {% endwith %}
         {% empty %}

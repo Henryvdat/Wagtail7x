@@ -28,7 +28,7 @@
     <p class="meta">{{ page.date }}</p>
 
     {% if page.main_image %}
-        {% image page.main_image width-800 %}
+        {% image page.main_image max-800x600 %}
     {% endif %}
 
     {% if page.intro %}<div class="intro">{{ page.intro|richtext }}</div>{% endif %}
