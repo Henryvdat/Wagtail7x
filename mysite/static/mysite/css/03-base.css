@@ -3,6 +3,7 @@
 html {
   font-size: var(--font-size-base);
   scroll-behavior: smooth;
+  scrollbar-gutter: stable; /* prevents layout shift when scrollbar appears/disappears */
 }
 
 body {
