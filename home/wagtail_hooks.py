@@ -289,3 +289,22 @@ def block_styles_admin_js():
 })();
 </script>
 """)
+
+
+# ── Sitemap / page tree ───────────────────────────────────────────────────
+
+@hooks.register("register_admin_urls")
+def register_sitemap_urls():
+    return [
+        path("sitemap/", views.sitemap_view, name="sitemap_view"),
+    ]
+
+
+@hooks.register("register_admin_menu_item")
+def register_sitemap_menu_item():
+    return MenuItem(
+        "Sitemap",
+        "/admin/sitemap/",
+        icon_name="site",
+        order=9400,
+    )

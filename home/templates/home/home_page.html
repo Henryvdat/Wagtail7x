@@ -16,6 +16,7 @@
     <h1 class="page-title{% if page.title_css_classes %} {{ page.title_css_classes }}{% endif %}">
         {% if page.rich_title %}{{ page.rich_title|richtext_inline }}{% else %}{{ page.title }}{% endif %}
     </h1>
+    <hr class="title-rule">
 
     {% if page.intro %}
         <div class="intro">{{ page.intro|richtext }}</div>

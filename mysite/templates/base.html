@@ -23,13 +23,10 @@
         <base target="_blank">
         {% endif %}
 
-        {# Google Fonts — matches the fonts set in 01-settings.css #}
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-
-        {# Main stylesheet — one link, 8 layers internally #}
+        {# Main stylesheet — one link, 8 layers internally. No external font requests. #}
         <link rel="stylesheet" type="text/css" href="{% static 'mysite/css/main.css' %}">
+
+        {% if settings.home.SiteSettings.font_css %}<style>{{ settings.home.SiteSettings.font_css }}</style>{% endif %}
 
         {# Per-page: load a separate CSS file for one page only #}
         {% block extra_css %}{% endblock %}

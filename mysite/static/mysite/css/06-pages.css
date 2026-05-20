@@ -22,6 +22,14 @@
 .page-title a      { color: var(--body-link); }
 .page-title a:hover{ color: var(--body-link-hover); }
 
+/* ── Title rule — full-width line below the page <h1> ───────────────────── */
+.title-rule {
+  border: none;
+  border-top: 2px solid var(--color-brand-accent);
+  margin: 0 0 var(--space-md);
+  width: 100%;
+}
+
 /* Home page — hero often goes full-width, no container padding */
 body.page-home .site-main {
   padding-block: 0;

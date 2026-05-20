@@ -44,12 +44,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden; /* clip any image that would exceed viewport on small screens */
 }
 
 .page-subheader__image {
   display: block;
   max-width: 800px;
-  width: auto;   /* natural size, capped at max-width — never stretched to fill */
+  width: 100%;     /* scales down to fit container on iPhone; capped at 800px on desktop */
   height: auto;
   border-radius: var(--border-radius);
 }

@@ -19,12 +19,18 @@
   --color-gray-dark:      #555555;
 
   /* ── Typography ────────────────────────────────────────────
-     Change font names here AND update the Google Fonts link
-     in mysite/templates/base.html to match.                  */
+     All fonts are local/system stacks — zero external requests.
+     Override via Site Settings → Typography in the Wagtail admin,
+     or edit the values here directly.
 
-  --font-heading:   'Poppins', 'Segoe UI', sans-serif;
-  --font-body:      'Inter', 'Helvetica Neue', sans-serif;
-  --font-mono:      'JetBrains Mono', 'Fira Code', monospace;
+     --font-header  → site nav bar only
+     --font-heading → ALL h1–h6 and page titles (universal)
+     --font-body    → paragraph and general page text          */
+
+  --font-header:    'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-heading:   'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-body:      Georgia, 'Times New Roman', serif;
+  --font-mono:      'Courier New', Courier, monospace;
   --font-size-base: 1rem;
   --line-height:    1.6;
 
@@ -35,7 +41,7 @@
   --header-text:       var(--color-white);
   --header-link:       var(--color-white);
   --header-link-hover: var(--color-brand-accent);
-  --header-font:       var(--font-heading);
+  --header-font:       var(--font-header);
   --header-height:     4rem;
 
   /* ── BODY / MAIN ────────────────────────────────────────────
@@ -58,13 +64,14 @@
 
   /* ── Page Title ─────────────────────────────────────────────
      Controls the <h1> rendered from page.title / page.rich_title.
-     Set these to taste — independent of the global h1 rule.     */
+     Uses --font-heading so it stays in sync with all other
+     headings when changed via Site Settings.                  */
 
-  --page-title-size:   1.1rem;   /* close to body text; increase e.g. to 1.5rem or 2rem */
+  --page-title-size:   1.1rem;   /* increase e.g. to 1.5rem or 2rem */
   --page-title-weight: 400;
-  --page-title-family: var(--font-body);   /* swap to var(--font-heading) for a heading feel */
+  --page-title-family: var(--font-heading);
   --page-title-color:  var(--body-text);
-  --page-title-margin: var(--space-lg) 0 var(--space-md); /* INCREASE SPACE ABOVE THE PAGE 
+  --page-title-margin: var(--space-lg) 0 var(--space-md); /* INCREASE SPACE ABOVE THE PAGE
   TITLE IN THE FIRST VAR: var(--space-lg) */
 
   /* ── Spacing & Layout ───────────────────────────────────── */
