@@ -34,6 +34,34 @@
   text-decoration: none;
 }
 
+/* ── Subheader strip — shared across page types ─────────── */
+/*    Lives outside .container so it's naturally full-width.
+      Used by BlogIndexPage and StandardPage.                 */
+
+.page-subheader {
+  width: 100%;
+  padding: var(--space-lg) var(--space-md);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-subheader__image {
+  display: block;
+  max-width: 800px;
+  width: auto;   /* natural size, capped at max-width — never stretched to fill */
+  height: auto;
+  border-radius: var(--border-radius);
+}
+
+/* Remove site-main top padding when a subheader strip is present.
+   Double-class selector (0,2,0) beats the single-class .site-main rule (0,1,0)
+   without needing !important. */
+.site-main.subheader-flush {
+  padding-top: 0;
+  padding-block-start: 0;
+}
+
 /* ── Card ───────────────────────────────────────────────── */
 .card {
   background: var(--color-white);

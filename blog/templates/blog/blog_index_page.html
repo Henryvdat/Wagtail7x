@@ -3,7 +3,7 @@
 {% load static wagtailcore_tags wagtailimages_tags %}
 
 {% block body_class %}page-blog-index{% endblock %}
-{% block main_class %}blog-index-main{% endblock %}
+{% block main_class %}subheader-flush{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'mysite/css/pages/blog.css' %}">
@@ -27,11 +27,11 @@
 
 {# ── Subheader strip — lives OUTSIDE .container so it's naturally full-width ── #}
 {% block precontent %}
-    <div class="blog-subheader"
+    <div class="page-subheader"
          style="background-color: {{ page.subheader_bg_color|default:'#2d4a3e' }};">
         {% if page.subheader_image %}
-            {% image page.subheader_image width-600 as sub_img %}
-            <img class="blog-subheader__image"
+            {% image page.subheader_image width-800 as sub_img %}
+            <img class="page-subheader__image"
                  src="{{ sub_img.url }}"
                  alt="{{ sub_img.alt }}">
         {% endif %}

@@ -133,32 +133,6 @@
 }
 
 
-/* ── Blog Index — flush subheader: remove site-main top padding ── */
-
-.blog-index-main {
-  padding-block-start: 0;
-}
-
-/* ── Blog Index — subheader strip ────────────────────────── */
-
-.blog-subheader {
-  /* Naturally full-width — lives outside .container in base.html */
-  width: 100%;
-  padding: var(--space-lg) var(--space-md);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.blog-subheader__image {
-  display: block;
-  max-width: 600px;
-  width: 100%;
-  height: auto;
-  border-radius: var(--border-radius);
-}
-
 /* ── Blog Index — intro text below subheader ─────────────── */
 
 .blog-subheader-text {

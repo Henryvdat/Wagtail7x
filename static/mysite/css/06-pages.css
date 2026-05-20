@@ -7,9 +7,16 @@ body.page-home .site-main {
   padding-block: 0;
 }
 
-/* Blog index and post pages — narrow reading column */
-body.page-blog-index .site-main,
-body.page-blog-post   .site-main {
+/* Blog index — full-width site-main so the subheader strip spans the viewport;
+   narrow column applied only to the content container inside site-main,
+   leaving the header and footer containers unaffected. */
+body.page-blog-index .site-main .container {
+  max-width: 48rem;
+  margin-inline: auto;
+}
+
+/* Blog post pages — narrow reading column on site-main (no full-width subheader) */
+body.page-blog-post .site-main {
   max-width: 48rem;
   margin-inline: auto;
 }

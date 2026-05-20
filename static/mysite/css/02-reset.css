@@ -1,5 +1,11 @@
 /* 02-reset.css — modern minimal reset */
 
+html {
+  /* Reserve scrollbar lane on all pages so the header never shifts
+     left/right when a scrollbar appears or disappears. */
+  scrollbar-gutter: stable;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;

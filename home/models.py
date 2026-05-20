@@ -29,10 +29,37 @@ class HomePage(Page):
 
 
 class StandardPage(Page):
+    # ── Subheader strip ──────────────────────────────────────
+    subheader_bg_color = models.CharField(
+        max_length=32,
+        blank=True,
+        default="",
+        verbose_name="Subheader background colour",
+        help_text="Any valid CSS colour: hex (#1a2b3c), rgb(), named colour, etc. "
+                  "Leave blank to hide the subheader strip.",
+    )
+    subheader_image = models.ForeignKey(
+        get_image_model_string(),
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        verbose_name="Subheader image",
+        help_text="Centred image displayed inside the coloured subheader strip.",
+    )
+
     intro = RichTextField(blank=True)
     body = StreamField(STANDARD_BLOCKS, use_json_field=True, blank=True)
 
     content_panels = Page.content_panels + [
+        MultiFieldPanel(
+            [
+                FieldPanel("subheader_bg_color"),
+                FieldPanel("subheader_image"),
+            ],
+            heading="Subheader strip",
+            classname="collapsible",
+        ),
         FieldPanel('intro'),
         FieldPanel('body'),
     ]
