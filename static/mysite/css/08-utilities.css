@@ -22,6 +22,33 @@
   white-space: nowrap;
 }
 
+/* ── Heroicon helpers ───────────────────────────────────── */
+/* Inline icon — sits on the text baseline, sizes to current font */
+.icon--inline {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em; /* nudge onto baseline */
+  flex-shrink: 0;
+}
+.icon--sm { width: 1rem;   height: 1rem; }
+.icon--md { width: 1.25rem; height: 1.25rem; }
+.icon--lg { width: 1.5rem;  height: 1.5rem; }
+
+/* "Read more" link with icon */
+.read-more-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+}
+
+/* ── Search form ────────────────────────────────────────── */
+.search-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
 /* Break out of the container for full-width sections */
 .full-width {
   width: 100vw;

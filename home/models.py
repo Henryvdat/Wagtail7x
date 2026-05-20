@@ -10,6 +10,13 @@ from .blocks import STANDARD_BLOCKS
 
 
 class HomePage(Page):
+    rich_title = RichTextField(
+        blank=True,
+        features=['bold', 'italic', 'link', 'superscript', 'subscript'],
+        verbose_name="Display title (rich text)",
+        help_text="Optional. Replaces the plain title on the page. "
+                  "Supports bold, italic, links. Leave blank to use the plain title above.",
+    )
     intro = RichTextField(blank=True)
     body = StreamField(STANDARD_BLOCKS, use_json_field=True, blank=True)
     title_css_classes = models.CharField(
@@ -20,6 +27,7 @@ class HomePage(Page):
     )
 
     content_panels = Page.content_panels + [
+        FieldPanel('rich_title'),
         FieldPanel('title_css_classes'),
         FieldPanel('intro'),
         FieldPanel('body'),

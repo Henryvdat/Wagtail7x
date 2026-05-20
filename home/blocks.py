@@ -7,6 +7,7 @@ from wagtail.blocks import (
     StreamBlock,
     StructBlock,
 )
+from wagtail.contrib.typed_table_block.blocks import TypedTableBlock
 from wagtail.images.blocks import ImageChooserBlock
 
 ALIGNMENT_CHOICES = [
@@ -103,12 +104,45 @@ class SectionBlock(StructBlock):
         label = 'Section'
 
 
+class StyledTableBlock(StructBlock):
+    """
+    TypedTableBlock wrapped with a caption, alignment, and shared BlockStylesBlock options.
+    Columns are typed (text, rich_text, numeric) and defined by the editor at authoring time.
+    """
+    caption = CharBlock(
+        required=False,
+        label='Caption',
+        help_text='Optional table caption — recommended for accessibility.',
+    )
+    table = TypedTableBlock([
+        ('text',      CharBlock()),
+        ('rich_text', RichTextBlock()),
+        ('numeric',   CharBlock(
+            help_text='Enter a number. Right-aligned in the rendered table.',
+        )),
+    ], label='Table data')
+    header_bg_color   = CharBlock(required=False, label='Header background colour',
+                                  help_text='Any CSS colour — e.g. #1a2b3c, steelblue. Leave blank for no background.')
+    header_text_color = CharBlock(required=False, label='Header text colour',
+                                  help_text='Any CSS colour — e.g. white, #333. Leave blank for default.')
+    alignment = ChoiceBlock(choices=ALIGNMENT_CHOICES, default='full', required=False)
+    striped    = BooleanBlock(required=False, label='Striped rows',
+                              help_text='Alternate row background colour for readability.')
+    styles     = BlockStylesBlock(required=False, label='Block styles')
+
+    class Meta:
+        template = 'home/blocks/table.html'
+        icon  = 'table'
+        label = 'Table'
+
+
 # Blocks available inside columns (no nesting columns within columns)
 class ColumnContentBlock(StreamBlock):
     rich_text = RichTextAlignedBlock()
     image     = ImageAlignedBlock()
     thumbnail = ThumbnailAlignedBlock()
     quote     = QuoteAlignedBlock()
+    table     = StyledTableBlock()
     raw_html  = RawHTMLBlock(label='Raw HTML', icon='code')
 
     class Meta:
@@ -149,6 +183,7 @@ STANDARD_BLOCKS = [
     ('image',        ImageAlignedBlock()),
     ('thumbnail',    ThumbnailAlignedBlock()),
     ('quote',        QuoteAlignedBlock()),
+    ('table',        StyledTableBlock()),
     ('section',      SectionBlock()),
     ('two_columns',  TwoColumnBlock()),
     ('three_columns', ThreeColumnBlock()),

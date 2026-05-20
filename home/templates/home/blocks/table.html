@@ -1,0 +1,36 @@
+{% load wagtailcore_tags %}
+{% with s=value.styles %}
+<div class="block-table block-align--{{ value.alignment }}{% if value.striped %} block-table--striped{% endif %}{% if s.card %} block--card{% endif %}{% if s.border %} block--border{% endif %}{% if s.custom_classes %} {{ s.custom_classes }}{% endif %}"{% if s.background or s.text_color or s.border_color %} style="{% if s.background %}background:{{ s.background }};{% endif %}{% if s.text_color %}color:{{ s.text_color }};{% endif %}{% if s.border and s.border_color %}border-color:{{ s.border_color }};{% endif %}"{% endif %}>
+  <div class="block-table__scroll-wrapper">
+    <table class="block-table__table">
+      {% if value.caption %}
+        <caption class="block-table__caption">{{ value.caption }}</caption>
+      {% endif %}
+      {% if value.table.columns %}
+        <thead{% if value.header_bg_color or value.header_text_color %} style="{% if value.header_bg_color %}background:{{ value.header_bg_color }};{% endif %}{% if value.header_text_color %}color:{{ value.header_text_color }};{% endif %}"{% endif %}>
+          <tr>
+            {% for column in value.table.columns %}
+              <th scope="col" class="block-table__th block-table__th--{{ column.block_type }}">{{ column.heading }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+      {% endif %}
+      <tbody>
+        {% for row in value.table.rows %}
+          <tr class="block-table__row">
+            {% for cell in row %}
+              <td class="block-table__td block-table__td--{{ cell.block_type }}">
+                {% if cell.block_type == 'rich_text' %}
+                  {{ cell.value|richtext }}
+                {% else %}
+                  {{ cell.value }}
+                {% endif %}
+              </td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endwith %}

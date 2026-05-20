@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static wagtailcore_tags %}
+{% load static wagtailcore_tags nav_tags %}
 
 {% block body_class %}template-searchresults{% endblock %}
 
@@ -10,7 +10,7 @@
 
 <form action="{% url 'search' %}" method="get">
     <input type="text" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
-    <input type="submit" value="Search" class="button">
+    <button type="submit" class="btn btn-primary search-submit">{% heroicon "magnifying-glass" css_class="icon icon--inline" %} Search</button>
 </form>
 
 {% if search_results %}

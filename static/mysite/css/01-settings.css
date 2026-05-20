@@ -56,6 +56,17 @@
   --footer-link-hover: var(--color-white);
   --footer-font:       var(--font-body);
 
+  /* ── Page Title ─────────────────────────────────────────────
+     Controls the <h1> rendered from page.title / page.rich_title.
+     Set these to taste — independent of the global h1 rule.     */
+
+  --page-title-size:   1.1rem;   /* close to body text; increase e.g. to 1.5rem or 2rem */
+  --page-title-weight: 400;
+  --page-title-family: var(--font-body);   /* swap to var(--font-heading) for a heading feel */
+  --page-title-color:  var(--body-text);
+  --page-title-margin: var(--space-lg) 0 var(--space-md); /* INCREASE SPACE ABOVE THE PAGE 
+  TITLE IN THE FIRST VAR: var(--space-lg) */
+
   /* ── Spacing & Layout ───────────────────────────────────── */
 
   --space-xs:  0.25rem;

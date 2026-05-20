@@ -2,6 +2,26 @@
    Target specific page types using the body class set in each template.
    Pattern: body.page-{page-name} .site-main { ... }                    */
 
+/* ── Page title ──────────────────────────────────────────────────────────
+   Applied to the <h1> in home_page.html and standard_page.html.
+   Size, weight, font, and colour are controlled by CSS variables in
+   01-settings.css — edit those rather than touching this rule.           */
+.page-title {
+  font-size:   var(--page-title-size);
+  font-weight: var(--page-title-weight);
+  font-family: var(--page-title-family);
+  color:       var(--page-title-color);
+  margin:      var(--page-title-margin);
+  line-height: var(--line-height);
+}
+
+/* Rich-text content inside the title (from page.rich_title) inherits the
+   same size/weight so inline bold/italic are relative, not full h1-sized. */
+.page-title strong { font-weight: 700; }
+.page-title em     { font-style: italic; }
+.page-title a      { color: var(--body-link); }
+.page-title a:hover{ color: var(--body-link-hover); }
+
 /* Home page — hero often goes full-width, no container padding */
 body.page-home .site-main {
   padding-block: 0;

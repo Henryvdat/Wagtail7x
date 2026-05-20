@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load static wagtailcore_tags wagtailimages_tags %}
+{% load static wagtailcore_tags wagtailimages_tags nav_tags %}
 
 {% block body_class %}page-blog-index{% endblock %}
 {% block main_class %}subheader-flush{% endblock %}
@@ -72,7 +72,7 @@
                     <h2><a href="{% pageurl post %}">{{ post.title }}</a></h2>
                     {% if post.date %}<p class="meta">{{ post.date }}</p>{% endif %}
                     {% if post.intro %}<div class="intro">{{ post.intro|richtext }}</div>{% endif %}
-                    <a href="{% pageurl post %}">Read more →</a>
+                    <a href="{% pageurl post %}" class="read-more-link">Read more {% heroicon "arrow-right" css_class="icon icon--inline" %}</a>
                 </div>
             </article>
         {% endwith %}

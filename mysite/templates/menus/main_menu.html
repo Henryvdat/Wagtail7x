@@ -1,0 +1,28 @@
+{% load menu_tags %}
+{# Main menu template — rendered by {% main_menu %} in base.html #}
+{# Each item is a wagtailmenus MenuItem with .href, .text, .active_class, .has_children_in_menu #}
+<ul class="site-nav__list">
+    {% for item in menu_items %}
+    <li class="site-nav__item{% if item.active_class %} {{ item.active_class }}{% endif %}">
+        <a href="{{ item.href }}"
+           class="site-nav__link"
+           {% if item.active_class == 'active' %}aria-current="page"{% endif %}>
+            {{ item.text }}
+        </a>
+        {# Sub-menu (level 2) if present #}
+        {% if item.has_children_in_menu %}
+        <ul class="site-nav__sub-list">
+            {% for child in item.children %}
+            <li class="site-nav__sub-item{% if child.active_class %} {{ child.active_class }}{% endif %}">
+                <a href="{{ child.href }}"
+                   class="site-nav__link"
+                   {% if child.active_class == 'active' %}aria-current="page"{% endif %}>
+                    {{ child.text }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
