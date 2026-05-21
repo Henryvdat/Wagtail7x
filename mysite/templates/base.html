@@ -46,7 +46,7 @@
                     {% with ss=settings.home.SiteSettings %}
                     <a href="/" class="site-logo">
                         {% if ss.header_icon %}
-                            {% image ss.header_icon width-40 as hi %}
+                            {% image ss.header_icon height-40 as hi %}
                             <img src="{{ hi.url }}" alt=""
                                  class="site-logo__icon{% if ss.header_icon_css_classes %} {{ ss.header_icon_css_classes }}{% endif %}"
                                  aria-hidden="true">

@@ -14,7 +14,7 @@
   /* Blog section — warm editorial theme override
      Overrides the default navy/orange palette from 01-settings.css */
   :root {
-    --header-bg:          #2d4a3e;   /* forest green */
+    --header-bg:          {{ page.header_bg_color|default:'#2d4a3e' }};  /* set in admin → Header & subheader strip */
     --header-link-hover:  #f5c87a;   /* warm gold */
     --body-bg:            #faf7f2;   /* warm linen */
     --body-text:          #2c2416;   /* warm near-black */
@@ -30,7 +30,7 @@
     <div class="page-subheader"
          style="background-color: {{ page.subheader_bg_color|default:'#2d4a3e' }};">
         {% if page.subheader_image %}
-            {% image page.subheader_image width-800 as sub_img %}
+            {% image page.subheader_image original as sub_img %}
             <img class="page-subheader__image"
                  src="{{ sub_img.url }}"
                  alt="{{ sub_img.alt }}">

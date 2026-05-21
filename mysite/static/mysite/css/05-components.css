@@ -44,14 +44,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden; /* clip any image that would exceed viewport on small screens */
+  overflow: hidden;  /* crop image edges on narrow screens; never scale it down */
 }
 
 .page-subheader__image {
   display: block;
-  max-width: 800px;
-  width: 100%;     /* scales down to fit container on iPhone; capped at 800px on desktop */
-  height: auto;
+  width: auto;       /* natural width — no stretching */
+  max-width: none;   /* override reset's max-width:100% so height is never reduced */
+  height: auto;      /* natural height */
+  flex-shrink: 0;    /* prevent flexbox from squeezing the image */
   border-radius: var(--border-radius);
 }
 

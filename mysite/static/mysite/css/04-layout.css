@@ -42,8 +42,8 @@
   font-size: 1.25rem;
 }
 .site-logo__icon {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: auto;       /* natural width — don't squish non-square logos */
+  height: 2.5rem;    /* fixed height anchors the logo to the header bar */
   object-fit: contain;
   flex-shrink: 0;
 }

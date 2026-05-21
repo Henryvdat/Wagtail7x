@@ -4,6 +4,8 @@
 
 {% block body_class %}page-blog-post{% endblock %}
 
+{% block main_class %}{% if page.subheader_bg_color or page.subheader_image %}subheader-flush{% endif %}{% endblock %}
+
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'mysite/css/pages/blog.css' %}">
 {% endblock %}
@@ -12,7 +14,7 @@
 <style>
   /* Blog post — same warm editorial theme as blog index */
   :root {
-    --header-bg:          #2d4a3e;
+    --header-bg:          {{ page.header_bg_color|default:'#2d4a3e' }};  /* set in admin → Header & subheader strip */
     --header-link-hover:  #f5c87a;
     --body-bg:            #faf7f2;
     --body-text:          #2c2416;
@@ -21,6 +23,21 @@
     --footer-bg:          #2d4a3e;
   }
 </style>
+{% endblock %}
+
+{# ── Subheader strip — lives OUTSIDE .container so it's naturally full-width ── #}
+{% block precontent %}
+    {% if page.subheader_bg_color or page.subheader_image %}
+    <div class="page-subheader"
+         style="background-color: {{ page.subheader_bg_color|default:'transparent' }};">
+        {% if page.subheader_image %}
+            {% image page.subheader_image original as sub_img %}
+            <img class="page-subheader__image"
+                 src="{{ sub_img.url }}"
+                 alt="{{ sub_img.alt }}">
+        {% endif %}
+    </div>
+    {% endif %}
 {% endblock %}
 
 {% block content %}

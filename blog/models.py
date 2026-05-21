@@ -37,7 +37,15 @@ class BlogIndexPage(Page):
                   "Applied behind the thumbnail on the index listing only.",
     )
 
-    # ── Subheader strip ──────────────────────────────────────
+    # ── Header & subheader strip ─────────────────────────────
+    header_bg_color = models.CharField(
+        max_length=32,
+        blank=True,
+        default="",
+        verbose_name="Header background colour",
+        help_text="Overrides the nav bar background colour on this page. "
+                  "Any valid CSS colour. Leave blank for the site default.",
+    )
     subheader_bg_color = models.CharField(
         max_length=32,
         blank=True,
@@ -77,10 +85,11 @@ class BlogIndexPage(Page):
         ),
         MultiFieldPanel(
             [
+                FieldPanel("header_bg_color"),
                 FieldPanel("subheader_bg_color"),
                 FieldPanel("subheader_image"),
             ],
-            heading="Subheader strip",
+            heading="Header & subheader strip",
             classname="collapsible",
         ),
         FieldPanel("subheader_text"),
@@ -115,7 +124,42 @@ class BlogPage(Page):
         related_name="+",
     )
 
+    # ── Header & subheader strip ─────────────────────────────
+    header_bg_color = models.CharField(
+        max_length=32,
+        blank=True,
+        default="",
+        verbose_name="Header background colour",
+        help_text="Overrides the nav bar background colour on this page. "
+                  "Any valid CSS colour. Leave blank for the site default.",
+    )
+    subheader_bg_color = models.CharField(
+        max_length=32,
+        blank=True,
+        default="",
+        verbose_name="Subheader background colour",
+        help_text="Any valid CSS colour. Leave blank to hide the subheader strip.",
+    )
+    subheader_image = models.ForeignKey(
+        get_image_model_string(),
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        verbose_name="Subheader image",
+        help_text="Centred image displayed inside the coloured subheader strip.",
+    )
+
     content_panels = Page.content_panels + [
+        MultiFieldPanel(
+            [
+                FieldPanel("header_bg_color"),
+                FieldPanel("subheader_bg_color"),
+                FieldPanel("subheader_image"),
+            ],
+            heading="Header & subheader strip",
+            classname="collapsible",
+        ),
         FieldPanel("date"),
         FieldPanel("intro"),
         FieldPanel("body"),

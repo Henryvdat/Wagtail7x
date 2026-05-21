@@ -88,7 +88,42 @@ class HomePage(Page):
         help_text="Space-separated CSS classes to apply to the page title <h1>, e.g. 'text-hero text-center u-color-accent'",
     )
 
+    # ── Header & subheader ───────────────────────────────────
+    header_bg_color = models.CharField(
+        max_length=32,
+        blank=True,
+        default="",
+        verbose_name="Header background colour",
+        help_text="Overrides the nav bar background colour on this page. "
+                  "Any valid CSS colour (e.g. #1a3a5c, darkgreen). Leave blank for the site default.",
+    )
+    subheader_bg_color = models.CharField(
+        max_length=32,
+        blank=True,
+        default="",
+        verbose_name="Subheader background colour",
+        help_text="Any valid CSS colour. Leave blank to hide the subheader strip.",
+    )
+    subheader_image = models.ForeignKey(
+        get_image_model_string(),
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        verbose_name="Subheader image",
+        help_text="Centred image displayed inside the coloured subheader strip.",
+    )
+
     content_panels = Page.content_panels + [
+        MultiFieldPanel(
+            [
+                FieldPanel("header_bg_color"),
+                FieldPanel("subheader_bg_color"),
+                FieldPanel("subheader_image"),
+            ],
+            heading="Header & subheader",
+            classname="collapsible",
+        ),
         FieldPanel('rich_title'),
         FieldPanel('title_css_classes'),
         FieldPanel('intro'),
@@ -99,7 +134,15 @@ class HomePage(Page):
 
 
 class StandardPage(Page):
-    # ── Subheader strip ──────────────────────────────────────
+    # ── Header & subheader strip ─────────────────────────────
+    header_bg_color = models.CharField(
+        max_length=32,
+        blank=True,
+        default="",
+        verbose_name="Header background colour",
+        help_text="Overrides the nav bar background colour on this page. "
+                  "Any valid CSS colour (e.g. #1a3a5c, darkgreen). Leave blank for the site default.",
+    )
     subheader_bg_color = models.CharField(
         max_length=32,
         blank=True,
@@ -124,10 +167,11 @@ class StandardPage(Page):
     content_panels = Page.content_panels + [
         MultiFieldPanel(
             [
+                FieldPanel("header_bg_color"),
                 FieldPanel("subheader_bg_color"),
                 FieldPanel("subheader_image"),
             ],
-            heading="Subheader strip",
+            heading="Header & subheader strip",
             classname="collapsible",
         ),
         FieldPanel('intro'),

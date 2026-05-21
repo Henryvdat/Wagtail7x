@@ -1,15 +1,33 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags nav_tags %}
+{% load wagtailcore_tags wagtailimages_tags nav_tags %}
 
 {% block body_class %}page-home{% endblock %}
+
+{% block main_class %}{% if page.subheader_bg_color or page.subheader_image %}subheader-flush{% endif %}{% endblock %}
 
 {% block page_theme %}
 <style>
   :root {
+    {% if page.header_bg_color %}--header-bg: {{ page.header_bg_color }};{% endif %}
     --body-bg:   #faf8f4;
     --body-text: #1a1a1a;
   }
 </style>
+{% endblock %}
+
+{# ── Subheader strip — lives OUTSIDE .container so it's naturally full-width ── #}
+{% block precontent %}
+    {% if page.subheader_bg_color or page.subheader_image %}
+    <div class="page-subheader"
+         style="background-color: {{ page.subheader_bg_color|default:'transparent' }};">
+        {% if page.subheader_image %}
+            {% image page.subheader_image original as sub_img %}
+            <img class="page-subheader__image"
+                 src="{{ sub_img.url }}"
+                 alt="{{ sub_img.alt }}">
+        {% endif %}
+    </div>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
