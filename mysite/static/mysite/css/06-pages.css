@@ -13,6 +13,7 @@
   color:       var(--page-title-color);
   margin:      var(--page-title-margin);
   line-height: var(--line-height);
+  text-align:  center;
 }
 
 /* Rich-text content inside the title (from page.rich_title) inherits the
