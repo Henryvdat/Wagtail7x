@@ -72,6 +72,47 @@ FONT_STACK_CHOICES = [("", "— CSS default —")] + [
 
 
 class HomePage(Page):
+
+    SHADER_CHOICES = [
+        ('',          '— None (no shader) —'),
+        ('gradient',  'Animated Gradient'),
+        ('wave',      'Wave Distortion'),
+        ('noise',     'Noise / FBM'),
+        ('accretion', 'Accretion (XorDev)'),
+    ]
+
+    # ── Page colours ────────────────────────────────────────
+    body_bg_color = models.CharField(
+        max_length=32,
+        blank=True,
+        default="",
+        verbose_name="Body background colour",
+        help_text="Any valid CSS colour (e.g. #0a0a1a, #ffffff). Leave blank for the site default.",
+    )
+    body_text_color = models.CharField(
+        max_length=32,
+        blank=True,
+        default="",
+        verbose_name="Body text colour",
+        help_text="Any valid CSS colour (e.g. #ffffff, #1a1a1a). Leave blank for the site default.",
+    )
+
+    # ── Shader hero (optional) ───────────────────────────────
+    shader_type = models.CharField(
+        max_length=32,
+        choices=SHADER_CHOICES,
+        default='',
+        blank=True,
+        verbose_name="Shader type",
+        help_text="Choose a shader to display as a full-width hero above the page content. "
+                  "Leave blank to use the standard subheader strip instead.",
+    )
+    shader_height = models.IntegerField(
+        default=400,
+        verbose_name="Canvas height (px)",
+        help_text="Height of the shader canvas in pixels. Recommended: 300–600.",
+    )
+
     rich_title = RichTextField(
         blank=True,
         features=['bold', 'italic', 'link', 'superscript', 'subscript'],
@@ -121,7 +162,23 @@ class HomePage(Page):
                 FieldPanel("subheader_bg_color"),
                 FieldPanel("subheader_image"),
             ],
-            heading="Header & subheader",
+            heading="Header & subheader strip",
+            classname="collapsible",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel("body_bg_color"),
+                FieldPanel("body_text_color"),
+            ],
+            heading="Page colours",
+            classname="collapsible",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel("shader_type"),
+                FieldPanel("shader_height"),
+            ],
+            heading="Shader hero (replaces subheader strip when active)",
             classname="collapsible",
         ),
         FieldPanel('rich_title'),
@@ -172,6 +229,24 @@ class WagtailShaderPage(Page):
         help_text="Centred image displayed inside the coloured subheader strip.",
     )
 
+    # ── Page colours ────────────────────────────────────────
+    body_bg_color = models.CharField(
+        max_length=32,
+        blank=True,
+        default="",
+        verbose_name="Body background colour",
+        help_text="Overrides the page background colour. Any valid CSS colour "
+                  "(e.g. #0a0a1a, #ffffff, rgb(10,10,26)). Leave blank for the site default.",
+    )
+    body_text_color = models.CharField(
+        max_length=32,
+        blank=True,
+        default="",
+        verbose_name="Body text colour",
+        help_text="Overrides the body text colour. Any valid CSS colour "
+                  "(e.g. #ffffff, #1a1a1a). Leave blank for the site default.",
+    )
+
     # ── Shader configuration ─────────────────────────────────
     shader_type = models.CharField(
         max_length=32,
@@ -198,6 +273,14 @@ class WagtailShaderPage(Page):
                 FieldPanel("subheader_image"),
             ],
             heading="Header & subheader strip",
+            classname="collapsible",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel("body_bg_color"),
+                FieldPanel("body_text_color"),
+            ],
+            heading="Page colours",
             classname="collapsible",
         ),
         MultiFieldPanel(

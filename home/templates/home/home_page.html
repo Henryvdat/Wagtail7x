@@ -1,46 +1,76 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags nav_tags %}
+{% load wagtailcore_tags wagtailimages_tags nav_tags static %}
 
 {% block body_class %}page-home{% endblock %}
-
-{% block main_class %}{% if page.subheader_bg_color or page.subheader_image %}subheader-flush{% endif %}{% endblock %}
 
 {% block page_theme %}
 <style>
   :root {
     {% if page.header_bg_color %}--header-bg: {{ page.header_bg_color }};{% endif %}
-    --body-bg:   #faf8f4;
-    --body-text: #1a1a1a;
+    --body-bg:       {{ page.body_bg_color|default:'#faf8f4' }};
+    --body-text:     {{ page.body_text_color|default:'#1a1a1a' }};
+    {% if page.shader_type %}--shader-height: {{ page.shader_height|default:400 }}px;{% endif %}
   }
 </style>
 {% endblock %}
 
-{# ── Subheader strip — lives OUTSIDE .container so it's naturally full-width ── #}
+{# Main class: flush layout whenever there's something full-width above the content #}
+{% block main_class %}{% if page.shader_type or page.subheader_bg_color or page.subheader_image %}subheader-flush{% endif %}{% endblock %}
+
 {% block precontent %}
-    {% if page.subheader_bg_color or page.subheader_image %}
-    <div class="page-subheader"
-         style="background-color: {{ page.subheader_bg_color|default:'transparent' }};">
-        {% if page.subheader_image %}
-            {% image page.subheader_image original as sub_img %}
-            <img class="page-subheader__image"
-                 src="{{ sub_img.url }}"
-                 alt="{{ sub_img.alt }}">
-        {% endif %}
+
+  {% if page.shader_type %}
+  {# ── Shader hero — shown instead of the subheader strip when a shader is selected ── #}
+  <div class="shader-hero" id="shader-hero">
+    <canvas id="shader-canvas" aria-hidden="true"></canvas>
+    <div class="shader-fallback" aria-hidden="true"></div>
+    {% if page.subheader_image %}
+    <div class="shader-hero__overlay">
+      {% image page.subheader_image original as sub_img %}
+      <img class="page-subheader__image" src="{{ sub_img.url }}" alt="{{ sub_img.alt }}">
     </div>
     {% endif %}
+  </div>
+
+  {% elif page.subheader_bg_color or page.subheader_image %}
+  {# ── Standard subheader strip — used when no shader is selected ── #}
+  <div class="page-subheader"
+       style="background-color: {{ page.subheader_bg_color|default:'transparent' }};">
+    {% if page.subheader_image %}
+      {% image page.subheader_image original as sub_img %}
+      <img class="page-subheader__image" src="{{ sub_img.url }}" alt="{{ sub_img.alt }}">
+    {% endif %}
+  </div>
+  {% endif %}
+
 {% endblock %}
 
 {% block content %}
-    <h1 class="page-title{% if page.title_css_classes %} {{ page.title_css_classes }}{% endif %}">
-        {% if page.rich_title %}{{ page.rich_title|richtext_inline }}{% else %}{{ page.title }}{% endif %}
-    </h1>
-    <hr class="title-rule">
+  <h1 class="page-title{% if page.title_css_classes %} {{ page.title_css_classes }}{% endif %}">
+    {% if page.rich_title %}{{ page.rich_title|richtext_inline }}{% else %}{{ page.title }}{% endif %}
+  </h1>
+  <hr class="title-rule">
 
-    {% if page.intro %}
-        <div class="intro">{{ page.intro|richtext }}</div>
-    {% endif %}
+  {% if page.intro %}
+    <div class="intro">{{ page.intro|richtext }}</div>
+  {% endif %}
 
-    {% for block in page.body %}
-        {% include_block block %}
-    {% endfor %}
+  {% for block in page.body %}
+    {% include_block block %}
+  {% endfor %}
+{% endblock %}
+
+{% block extra_js %}
+  {% if page.shader_type %}
+  <script>
+    window.ShaderConfig = {
+      height: {{ page.shader_height|default:400 }},
+      type:   "{{ page.shader_type }}"
+    };
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"></script>
+  <script src="{% static 'mysite/js/shader-init.js' %}"></script>
+  {% endif %}
 {% endblock %}

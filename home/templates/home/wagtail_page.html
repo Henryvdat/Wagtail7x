@@ -6,9 +6,9 @@
 {% block page_theme %}
 <style>
   :root {
-    {% if page.header_bg_color %}--header-bg: {{ page.header_bg_color }};{% endif %}
-    --body-bg:      #faf8f4;
-    --body-text:    #1a1a1a;
+    {% if page.header_bg_color %}--header-bg:      {{ page.header_bg_color }};{% endif %}
+    --body-bg:      {{ page.body_bg_color|default:'#faf8f4' }};
+    --body-text:    {{ page.body_text_color|default:'#1a1a1a' }};
     --shader-height: {{ page.shader_height|default:400 }}px;
   }
 </style>
