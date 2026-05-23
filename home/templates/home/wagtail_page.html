@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags nav_tags static %}
+
+{% block body_class %}page-standard page-shader{% endblock %}
+
+{% block page_theme %}
+<style>
+  :root {
+    {% if page.header_bg_color %}--header-bg: {{ page.header_bg_color }};{% endif %}
+    --body-bg:      #faf8f4;
+    --body-text:    #1a1a1a;
+    --shader-height: {{ page.shader_height|default:400 }}px;
+  }
+</style>
+{% endblock %}
+
+{% block main_class %}subheader-flush{% endblock %}
+
+{# ── Shader hero — full-width canvas strip, lives outside .container ── #}
+{% block precontent %}
+<div class="shader-hero" id="shader-hero">
+
+  {# The canvas Three.js renders into #}
+  <canvas id="shader-canvas" aria-hidden="true"></canvas>
+
+  {# Shown only when WebGL is unavailable (class added by JS) #}
+  <div class="shader-fallback" aria-hidden="true"></div>
+
+  {# Optional: subheader image overlaid on top of the canvas #}
+  {% if page.subheader_image %}
+  <div class="shader-hero__overlay">
+    {% image page.subheader_image original as sub_img %}
+    <img class="page-subheader__image"
+         src="{{ sub_img.url }}"
+         alt="{{ sub_img.alt }}">
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}
+
+{% block content %}
+  <h1 class="page-title">{{ page.title }}</h1>
+  <hr class="title-rule">
+
+  {% if page.intro %}
+    <div class="intro">{{ page.intro|richtext }}</div>
+  {% endif %}
+
+  {% for block in page.body %}
+    {% include_block block %}
+  {% endfor %}
+{% endblock %}
+
+{% block extra_js %}
+  {# Pass Django template context values to JS before loading the script #}
+  <script>
+    window.ShaderConfig = {
+      height: {{ page.shader_height|default:400 }},
+      type:   "{{ page.shader_type|default:'gradient' }}"
+    };
+  </script>
+
+  {# Three.js from CDN — r128 is stable and available on cdnjs #}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"></script>
+
+  {# Shader initialiser — inits after Three.js is loaded #}
+  <script src="{% static 'mysite/js/shader-init.js' %}"></script>
+{% endblock %}

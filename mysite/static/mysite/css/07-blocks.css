@@ -328,3 +328,130 @@
   width: 100%;
   margin-inline: 0;
 }
+/* ─────────────────────────────────────────────────────────────────────────────
+   Read More Button block  (.btn-read-more)
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* Wrapper — handles alignment via the shared block-align-- system */
+.block-read-more-button {
+  margin-block: var(--space-md, 1rem);
+}
+
+/* Base button — shared by all three style variants */
+.btn-read-more {
+  display: inline-block;
+  padding: 0.55em 1.4em;
+  border-radius: 4px;
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none !important;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease,
+              box-shadow 0.18s ease;
+  white-space: nowrap;
+}
+
+/* Solid — filled accent background */
+.btn-read-more--solid {
+  background-color: var(--color-brand-accent, #e07b39);
+  color: var(--color-white, #fff) !important;
+  border-color: var(--color-brand-accent, #e07b39);
+}
+.btn-read-more--solid:hover,
+.btn-read-more--solid:focus-visible {
+  background-color: var(--color-brand-primary, #1a3a5c);
+  border-color:     var(--color-brand-primary, #1a3a5c);
+  color: var(--color-white, #fff) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+/* Outline — transparent fill, coloured border */
+.btn-read-more--outline {
+  background-color: transparent;
+  color: var(--color-brand-accent, #e07b39) !important;
+  border-color: var(--color-brand-accent, #e07b39);
+}
+.btn-read-more--outline:hover,
+.btn-read-more--outline:focus-visible {
+  background-color: var(--color-brand-accent, #e07b39);
+  color: var(--color-white, #fff) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Ghost — text only, no background or border; underline on hover */
+.btn-read-more--ghost {
+  background-color: transparent;
+  color: var(--color-brand-accent, #e07b39) !important;
+  border-color: transparent;
+  padding-inline: 0.2em;
+}
+.btn-read-more--ghost:hover,
+.btn-read-more--ghost:focus-visible {
+  text-decoration: underline !important;
+  color: var(--color-brand-primary, #1a3a5c) !important;
+}
+
+/* Focus ring — accessibility */
+.btn-read-more:focus-visible {
+  outline: 3px solid var(--color-brand-accent, #e07b39);
+  outline-offset: 2px;
+}
+
+/* Inside a column: don't break out of column width */
+.block-columns__col .block-read-more-button {
+  overflow: hidden;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SHADER HERO  (WagtailShaderPage)
+   Full-width GPU-rendered canvas strip above the page title.
+   Height is controlled by --shader-height, injected from page.shader_height
+   via the {% block page_theme %} inline style in wagtail_page.html.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.shader-hero {
+  position:   relative;
+  width:      100%;
+  height:     var(--shader-height, 400px);
+  overflow:   hidden;
+  background: #0a0a1a; /* visible while Three.js boots; also the fallback bg */
+}
+
+/* The canvas Three.js renders into */
+.shader-hero canvas {
+  display: block;
+  width:   100% !important;  /* override Three.js inline style */
+  height:  100% !important;
+}
+
+/* CSS gradient fallback — shown when WebGL is unavailable */
+.shader-hero .shader-fallback {
+  display:    none;
+  position:   absolute;
+  inset:      0;
+  background: linear-gradient(135deg, #1a1a3a 0%, #3a1a5c 50%, #1a3a5c 100%);
+}
+
+/* JS adds this class to .shader-hero when WebGL context creation fails */
+.shader-hero.webgl-unavailable canvas         { display: none; }
+.shader-hero.webgl-unavailable .shader-fallback { display: block; }
+
+/* Optional subheader image overlaid on the canvas */
+.shader-hero__overlay {
+  position:        absolute;
+  inset:           0;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  pointer-events:  none;
+}
+
+.shader-hero__overlay img {
+  max-height: 80%;
+  max-width:  80%;
+  object-fit: contain;
+}

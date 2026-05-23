@@ -133,6 +133,95 @@ class HomePage(Page):
     template = 'home/home_page.html'
 
 
+class WagtailShaderPage(Page):
+    """
+    A page type based on StandardPage that adds a full-width GPU-rendered
+    canvas hero powered by Three.js + GLSL shaders.
+    """
+
+    SHADER_CHOICES = [
+        ('gradient',  'Animated Gradient'),
+        ('wave',      'Wave Distortion'),
+        ('noise',     'Noise / FBM'),
+        ('accretion', 'Accretion (XorDev)'),
+    ]
+
+    # ── Header & subheader strip ─────────────────────────────
+    header_bg_color = models.CharField(
+        max_length=32,
+        blank=True,
+        default="",
+        verbose_name="Header background colour",
+        help_text="Overrides the nav bar background colour on this page. "
+                  "Any valid CSS colour (e.g. #1a3a5c, darkgreen). Leave blank for the site default.",
+    )
+    subheader_bg_color = models.CharField(
+        max_length=32,
+        blank=True,
+        default="",
+        verbose_name="Subheader background colour",
+        help_text="Any valid CSS colour. Leave blank to hide the subheader strip.",
+    )
+    subheader_image = models.ForeignKey(
+        get_image_model_string(),
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        verbose_name="Subheader image",
+        help_text="Centred image displayed inside the coloured subheader strip.",
+    )
+
+    # ── Shader configuration ─────────────────────────────────
+    shader_type = models.CharField(
+        max_length=32,
+        choices=SHADER_CHOICES,
+        default='gradient',
+        verbose_name="Shader type",
+        help_text="Which GPU shader effect to display in the hero canvas.",
+    )
+    shader_height = models.IntegerField(
+        default=400,
+        verbose_name="Canvas height (px)",
+        help_text="Height of the shader canvas in pixels. Recommended: 300–600.",
+    )
+
+    # ── Page content ─────────────────────────────────────────
+    intro = RichTextField(blank=True)
+    body  = StreamField(STANDARD_BLOCKS, use_json_field=True, blank=True)
+
+    content_panels = Page.content_panels + [
+        MultiFieldPanel(
+            [
+                FieldPanel("header_bg_color"),
+                FieldPanel("subheader_bg_color"),
+                FieldPanel("subheader_image"),
+            ],
+            heading="Header & subheader strip",
+            classname="collapsible",
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel("shader_type"),
+                FieldPanel("shader_height"),
+            ],
+            heading="Shader hero",
+            classname="collapsible",
+        ),
+        FieldPanel('intro'),
+        FieldPanel('body'),
+    ]
+
+    template = 'home/wagtail_page.html'
+
+    # Allow this page type to appear in Wagtail menu choosers by default.
+    # Without this, the page is excluded from nav menus even when published.
+    show_in_menus_default = True
+
+    class Meta:
+        verbose_name = "Wagtail Shader Page"
+
+
 class StandardPage(Page):
     # ── Header & subheader strip ─────────────────────────────
     header_bg_color = models.CharField(
