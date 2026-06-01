@@ -328,3 +328,79 @@
   width: 100%;
   margin-inline: 0;
 }
+/* ─────────────────────────────────────────────────────────────────────────────
+   Read More Button block  (.btn-read-more)
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* Wrapper — handles alignment via the shared block-align-- system */
+.block-read-more-button {
+  margin-block: var(--space-md, 1rem);
+}
+
+/* Base button — shared by all three style variants */
+.btn-read-more {
+  display: inline-block;
+  padding: 0.55em 1.4em;
+  border-radius: 4px;
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease,
+              box-shadow 0.18s ease;
+  white-space: nowrap;
+}
+
+/* Solid — filled accent background */
+.btn-read-more--solid {
+  background-color: var(--color-brand-accent, #e07b39);
+  color: var(--color-white, #fff);
+  border-color: var(--color-brand-accent, #e07b39);
+}
+.btn-read-more--solid:hover,
+.btn-read-more--solid:focus-visible {
+  background-color: var(--color-brand-primary, #1a3a5c);
+  border-color:     var(--color-brand-primary, #1a3a5c);
+  color: var(--color-white, #fff);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+/* Outline — transparent fill, coloured border */
+.btn-read-more--outline {
+  background-color: transparent;
+  color: var(--color-brand-accent, #e07b39);
+  border-color: var(--color-brand-accent, #e07b39);
+}
+.btn-read-more--outline:hover,
+.btn-read-more--outline:focus-visible {
+  background-color: var(--color-brand-accent, #e07b39);
+  color: var(--color-white, #fff);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Ghost — text only, no background or border; underline on hover */
+.btn-read-more--ghost {
+  background-color: transparent;
+  color: var(--color-brand-accent, #e07b39);
+  border-color: transparent;
+  padding-inline: 0.2em;
+}
+.btn-read-more--ghost:hover,
+.btn-read-more--ghost:focus-visible {
+  text-decoration: underline;
+  color: var(--color-brand-primary, #1a3a5c);
+}
+
+/* Focus ring — accessibility */
+.btn-read-more:focus-visible {
+  outline: 3px solid var(--color-brand-accent, #e07b39);
+  outline-offset: 2px;
+}
+
+/* Inside a column: don't break out of column width */
+.block-columns__col .block-read-more-button {
+  overflow: hidden;
+}

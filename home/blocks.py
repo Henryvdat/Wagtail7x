@@ -2,6 +2,7 @@ from wagtail.blocks import (
     BooleanBlock,
     CharBlock,
     ChoiceBlock,
+    PageChooserBlock,
     RawHTMLBlock,
     RichTextBlock,
     StreamBlock,
@@ -136,14 +137,55 @@ class StyledTableBlock(StructBlock):
         label = 'Table'
 
 
+class ReadMoreButtonBlock(StructBlock):
+    """
+    A styled call-to-action button that links to any page on the site.
+    The button text, target page, visual style, and alignment are all
+    configurable by the editor. Full BlockStylesBlock support (bg colour,
+    text colour, border, custom CSS classes) is also available.
+    """
+    button_text = CharBlock(
+        max_length=100,
+        default='Read more',
+        label='Button text',
+        help_text='Label displayed on the button.',
+    )
+    page = PageChooserBlock(
+        label='Target page',
+        help_text='The page this button links to.',
+    )
+    button_style = ChoiceBlock(
+        choices=[
+            ('solid',   'Solid (filled)'),
+            ('outline', 'Outline'),
+            ('ghost',   'Ghost (text only)'),
+        ],
+        default='solid',
+        label='Button style',
+    )
+    alignment = ChoiceBlock(
+        choices=ALIGNMENT_CHOICES,
+        default='left',
+        required=False,
+        label='Alignment',
+    )
+    styles = BlockStylesBlock(required=False, label='Block styles')
+
+    class Meta:
+        template = 'home/blocks/read_more_button.html'
+        icon  = 'link'
+        label = 'Read More Button'
+
+
 # Blocks available inside columns (no nesting columns within columns)
 class ColumnContentBlock(StreamBlock):
-    rich_text = RichTextAlignedBlock()
-    image     = ImageAlignedBlock()
-    thumbnail = ThumbnailAlignedBlock()
-    quote     = QuoteAlignedBlock()
-    table     = StyledTableBlock()
-    raw_html  = RawHTMLBlock(label='Raw HTML', icon='code')
+    rich_text        = RichTextAlignedBlock()
+    image            = ImageAlignedBlock()
+    thumbnail        = ThumbnailAlignedBlock()
+    quote            = QuoteAlignedBlock()
+    table            = StyledTableBlock()
+    read_more_button = ReadMoreButtonBlock()
+    raw_html         = RawHTMLBlock(label='Raw HTML', icon='code')
 
     class Meta:
         icon = 'placeholder'
@@ -179,13 +221,14 @@ class ThreeColumnBlock(StructBlock):
 
 # Shared block list used across all page types
 STANDARD_BLOCKS = [
-    ('rich_text',    RichTextAlignedBlock()),
-    ('image',        ImageAlignedBlock()),
-    ('thumbnail',    ThumbnailAlignedBlock()),
-    ('quote',        QuoteAlignedBlock()),
-    ('table',        StyledTableBlock()),
-    ('section',      SectionBlock()),
-    ('two_columns',  TwoColumnBlock()),
-    ('three_columns', ThreeColumnBlock()),
-    ('raw_html',     RawHTMLBlock(label='Raw HTML', icon='code')),
+    ('rich_text',        RichTextAlignedBlock()),
+    ('image',            ImageAlignedBlock()),
+    ('thumbnail',        ThumbnailAlignedBlock()),
+    ('quote',            QuoteAlignedBlock()),
+    ('table',            StyledTableBlock()),
+    ('section',          SectionBlock()),
+    ('read_more_button', ReadMoreButtonBlock()),
+    ('two_columns',      TwoColumnBlock()),
+    ('three_columns',    ThreeColumnBlock()),
+    ('raw_html',         RawHTMLBlock(label='Raw HTML', icon='code')),
 ]

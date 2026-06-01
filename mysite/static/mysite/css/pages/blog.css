@@ -22,12 +22,11 @@
   background: var(--color-white);
   border-radius: var(--border-radius);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  transition: box-shadow 0.2s ease;
 }
 
 .blog-listing__item:hover {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  transform: translateY(-2px);
 }
 
 /* Thumbnail wrapper — holds the image + optional background colour.
@@ -87,17 +86,10 @@
   margin: 0;
 }
 
-.blog-listing__body > a:last-child {
-  font-weight: 600;
-  font-size: 0.875rem;
-  color: var(--body-link);
-  text-decoration: none;
-  letter-spacing: 0.02em;
+/* Read More button — push to card bottom, don't stretch full width */
+.blog-listing__body .btn-read-more {
   margin-block-start: auto;
-}
-
-.blog-listing__body > a:last-child:hover {
-  color: var(--body-link-hover);
+  align-self: flex-start;
 }
 
 

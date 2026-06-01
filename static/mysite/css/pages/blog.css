@@ -87,17 +87,10 @@
   margin: 0;
 }
 
-.blog-listing__body > a:last-child {
-  font-weight: 600;
-  font-size: 0.875rem;
-  color: var(--body-link);
-  text-decoration: none;
-  letter-spacing: 0.02em;
+/* Read more button — push to the bottom of the card body */
+.blog-listing__body .btn-read-more {
   margin-block-start: auto;
-}
-
-.blog-listing__body > a:last-child:hover {
-  color: var(--body-link-hover);
+  align-self: flex-start;
 }
 
 
@@ -218,4 +211,56 @@ body.page-blog-post .site-main > p:last-of-type a {
   background: var(--body-link);
   color: var(--color-white);
   border-color: var(--body-link);
+}
+
+
+/* ── Read More button on blog index cards ─────────────────── */
+
+.blog-listing__body .btn-read-more {
+  display: inline-block;
+  margin-block-start: auto;
+  align-self: flex-start;
+  padding: 0.55em 1.4em;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 2px solid transparent;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  cursor: pointer;
+}
+
+.blog-listing__body .btn-read-more--solid {
+  background-color: var(--color-brand-accent, #e07b39);
+  color: var(--color-white, #fff) !important;
+  border-color: var(--color-brand-accent, #e07b39);
+}
+
+.blog-listing__body .btn-read-more--solid:hover {
+  background-color: var(--color-brand-primary, #1a3a5c);
+  border-color: var(--color-brand-primary, #1a3a5c);
+  color: var(--color-white, #fff) !important;
+}
+
+.blog-listing__body .btn-read-more--outline {
+  background-color: transparent;
+  color: var(--color-brand-accent, #e07b39) !important;
+  border-color: var(--color-brand-accent, #e07b39);
+}
+
+.blog-listing__body .btn-read-more--outline:hover {
+  background-color: var(--color-brand-accent, #e07b39);
+  color: var(--color-white, #fff) !important;
+}
+
+.blog-listing__body .btn-read-more--ghost {
+  background-color: transparent;
+  color: var(--color-brand-accent, #e07b39) !important;
+  border-color: transparent;
+  padding-inline: 0.2em;
+}
+
+.blog-listing__body .btn-read-more--ghost:hover {
+  text-decoration: underline;
+  color: var(--color-brand-primary, #1a3a5c) !important;
 }
