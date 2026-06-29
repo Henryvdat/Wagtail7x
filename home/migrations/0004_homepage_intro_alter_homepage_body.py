@@ -16,6 +16,12 @@ class Migration(migrations.Migration):
             name='intro',
             field=models.TextField(blank=True),
         ),
+        # Ensure body contains valid JSON before converting to StreamField/JSONField.
+        # Django 6 adds a JSON_VALID CHECK constraint; empty strings from RichTextField fail it.
+        migrations.RunSQL(
+            sql="UPDATE home_homepage SET body = '[]' WHERE body IS NULL OR body = ''",
+            reverse_sql=migrations.RunSQL.noop,
+        ),
         migrations.AlterField(
             model_name='homepage',
             name='body',

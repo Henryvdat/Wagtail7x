@@ -1,29 +1,24 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags wagtailimages_tags nav_tags %}
+{% load wagtailcore_tags nav_tags %}
 
 {% block body_class %}page-contact{% endblock %}
 
-{% block page_theme %}
-<style>
-  :root {
-    {% if page.header_bg_color %}--header-bg: {{ page.header_bg_color }};{% endif %}
-    --body-bg:   #faf8f4;
-    --body-text: #1a1a1a;
-  }
-</style>
-{% endblock %}
-
 {% block content %}
-<h1 class="page-title">{{ page.title }}</h1>
-<hr class="title-rule">
+  <h1 class="page-title">{{ page.title }}</h1>
+  <hr class="title-rule">
 
-{% if page.intro %}
-<div class="intro">{{ page.intro|richtext }}</div>
-{% endif %}
+  {% if page.intro %}
+    <div class="intro">{{ page.intro|richtext }}</div>
+  {% endif %}
 
-<div class="contact-form-wrapper">
   <form action="{% pageurl page %}" method="post" class="contact-form" novalidate>
     {% csrf_token %}
+
+    {# Honeypot — invisible to real users; bots fill it and are silently discarded #}
+    <div style="display:none" aria-hidden="true">
+      <label for="website">Website</label>
+      <input type="text" id="website" name="website" value="" tabindex="-1" autocomplete="off">
+    </div>
 
     {% for field in form %}
     <div class="form-group{% if field.errors %} has-error{% endif %}">
@@ -38,7 +33,10 @@
     </div>
     {% endfor %}
 
-    <button type="submit" class="btn btn-primary">Send message</button>
+    <div class="contact-form__footer">
+      <button type="submit" class="btn btn-primary contact-form__submit-btn">
+        Send message &rarr;
+      </button>
+    </div>
   </form>
-</div>
 {% endblock %}

@@ -7,8 +7,11 @@
 <style>
   :root {
     {% if page.header_bg_color %}--header-bg: {{ page.header_bg_color }};{% endif %}
-    --body-bg:       {{ page.body_bg_color|default:'#faf8f4' }};
-    --body-text:     {{ page.body_text_color|default:'#1a1a1a' }};
+    --body-bg:       {{ page.body_bg_color|default:'#0d1b2e' }};
+    --body-text:     {{ page.body_text_color|default:'#e2e8f0' }};
+    --body-font:     var(--font-heading);
+    --body-link:     var(--color-brand-accent);
+    --body-link-hover: #f0a060;
     {% if page.shader_type %}--shader-height: {{ page.shader_height|default:400 }}px;{% endif %}
   }
 </style>
@@ -30,6 +33,14 @@
       <img class="page-subheader__image" src="{{ sub_img.url }}" alt="{{ sub_img.alt }}">
     </div>
     {% endif %}
+    {% if page.hero_headline %}
+    <div class="shader-hero__text">
+      <h1 class="shader-hero__headline">{{ page.hero_headline }}</h1>
+      {% if page.hero_strapline %}
+      <p class="shader-hero__strapline">{{ page.hero_strapline }}</p>
+      {% endif %}
+    </div>
+    {% endif %}
   </div>
 
   {% elif page.subheader_bg_color or page.subheader_image %}
@@ -46,11 +57,6 @@
 {% endblock %}
 
 {% block content %}
-  <h1 class="page-title{% if page.title_css_classes %} {{ page.title_css_classes }}{% endif %}">
-    {% if page.rich_title %}{{ page.rich_title|richtext_inline }}{% else %}{{ page.title }}{% endif %}
-  </h1>
-  <hr class="title-rule">
-
   {% if page.intro %}
     <div class="intro">{{ page.intro|richtext }}</div>
   {% endif %}
@@ -58,6 +64,15 @@
   {% for block in page.body %}
     {% include_block block %}
   {% endfor %}
+{% endblock %}
+
+{% block extra_content %}
+<div class="cta-banner">
+  <div class="container">
+    <p class="cta-banner__heading">Have a question about my products?</p>
+    <a href="/contact/" class="btn btn-primary cta-banner__btn">Get in touch &rarr;</a>
+  </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}

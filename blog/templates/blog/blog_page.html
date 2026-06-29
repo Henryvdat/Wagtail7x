@@ -54,7 +54,7 @@
         {% include_block block %}
     {% endfor %}
 
-    <p><a href="{{ page.get_parent.url }}">Return to blog</a></p>
+    <p><a href="{{ page.get_parent.url }}" class="btn btn-primary">&larr; Return to blog</a></p>
 
     {% with tags=page.tags.all %}
         {% if tags %}

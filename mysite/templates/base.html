@@ -23,7 +23,12 @@
         <base target="_blank">
         {% endif %}
 
-        {# Main stylesheet — one link, 8 layers internally. No external font requests. #}
+        {# Google Fonts — Montserrat for headings #}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+        {# Main stylesheet — one link, 8 layers internally. #}
         <link rel="stylesheet" type="text/css" href="{% static 'mysite/css/main.css' %}">
 
         {% if settings.home.SiteSettings.font_css %}<style>{{ settings.home.SiteSettings.font_css }}</style>{% endif %}
@@ -50,6 +55,9 @@
                             <img src="{{ hi.url }}" alt=""
                                  class="site-logo__icon{% if ss.header_icon_css_classes %} {{ ss.header_icon_css_classes }}{% endif %}"
                                  aria-hidden="true">
+                        {% else %}
+                            <img src="{% static 'mysite/images/logo.png' %}" alt=""
+                                 class="site-logo__icon" aria-hidden="true">
                         {% endif %}
                         <span{% if ss.site_name_css_classes %} class="{{ ss.site_name_css_classes }}"{% endif %}>
                             {% if ss.site_name %}{{ ss.site_name }}{% else %}{{ current_site.site_name }}{% endif %}
@@ -83,13 +91,37 @@
             <div class="container">
                 {% block content %}{% endblock %}
             </div>
+        {% block extra_content %}{% endblock %}
         </main>
 
         {# ══ FOOTER ══════════════════════════════════════════ #}
         <footer class="site-footer">
             <div class="container">
                 {% block footer %}
-                    <div class="site-footer__text">{% if settings.home.SiteSettings.footer_text %}{{ settings.home.SiteSettings.footer_text|richtext }}{% else %}<p>Neil Whittaker. Built with Wagtail.</p>{% endif %}</div>
+                {% wagtail_site as current_site %}
+                {% with ss=settings.home.SiteSettings %}
+                <div class="site-footer__inner">
+                    <div class="site-footer__brand">
+                        <a href="/" class="site-footer__logo">
+                            <img src="{% static 'mysite/images/logo.png' %}"
+                                 alt="{% if ss.site_name %}{{ ss.site_name }}{% else %}{{ current_site.site_name }}{% endif %}"
+                                 class="site-footer__logo-img">
+                        </a>
+                        <p class="site-footer__tagline">
+                            {% if ss.footer_text %}{{ ss.footer_text|striptags }}{% else %}Guitar software for musicians.{% endif %}
+                        </p>
+                    </div>
+                    <nav class="site-footer__nav" aria-label="Footer navigation">
+                        <ul>
+                            <li><a href="/blog/">Blog</a></li>
+                            <li><a href="/contact/">Contact</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="site-footer__bottom">
+                    <p>&copy; {% now "Y" %} {% if ss.site_name %}{{ ss.site_name }}{% else %}{{ current_site.site_name }}{% endif %}. All rights reserved.</p>
+                </div>
+                {% endwith %}
                 {% endblock %}
             </div>
         </footer>

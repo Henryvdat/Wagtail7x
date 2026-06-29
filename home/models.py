@@ -113,6 +113,20 @@ class HomePage(Page):
         help_text="Height of the shader canvas in pixels. Recommended: 300–600.",
     )
 
+    # ── Hero overlay text (shown on top of the shader canvas) ───
+    hero_headline = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name="Hero headline",
+        help_text="Large text displayed over the shader. E.g. 'Guitar Resources for Serious Players'",
+    )
+    hero_strapline = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name="Hero strapline",
+        help_text="Smaller subtitle beneath the headline. Leave blank to show headline only.",
+    )
+
     rich_title = RichTextField(
         blank=True,
         features=['bold', 'italic', 'link', 'superscript', 'subscript'],
@@ -177,6 +191,8 @@ class HomePage(Page):
             [
                 FieldPanel("shader_type"),
                 FieldPanel("shader_height"),
+                FieldPanel("hero_headline"),
+                FieldPanel("hero_strapline"),
             ],
             heading="Shader hero (replaces subheader strip when active)",
             classname="collapsible",

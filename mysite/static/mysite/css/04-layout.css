@@ -185,18 +185,79 @@
   background-color: var(--footer-bg);
   color: var(--footer-text);
   font-family: var(--footer-font);
-  padding-block: var(--space-sm);
+  padding-block: var(--space-xl) var(--space-lg);
 }
 
-/* Kill paragraph bottom margin inside the footer so richtext output
-   doesn't add unwanted space below the last line */
 .site-footer p {
   margin-bottom: 0;
 }
 
 .site-footer a {
   color: var(--footer-link);
+  text-decoration: none;
 }
 .site-footer a:hover {
   color: var(--footer-link-hover);
+  text-decoration: underline;
+}
+
+/* Two-column layout: brand left, nav right */
+.site-footer__inner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-xl);
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  margin-bottom: var(--space-md);
+}
+
+@media (max-width: 640px) {
+  .site-footer__inner {
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+}
+
+.site-footer__logo {
+  display: inline-block;
+  margin-bottom: 0.6rem;
+}
+
+.site-footer__logo-img {
+  height: 2rem;
+  width: auto;
+  display: block;
+}
+
+.site-footer__tagline {
+  font-size: 0.875rem;
+  color: rgba(255,255,255,0.5);
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+/* Footer nav */
+.site-footer__nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.site-footer__nav a {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+/* Bottom copyright bar */
+.site-footer__bottom {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.4);
+  font-family: var(--font-heading);
 }

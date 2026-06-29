@@ -2,6 +2,34 @@
    Target specific page types using the body class set in each template.
    Pattern: body.page-{page-name} .site-main { ... }                    */
 
+/* ── CTA banner — sits below site-main on the home page ─────────────────── */
+.cta-banner {
+  background: linear-gradient(135deg, #0a1e33 0%, #0d3356 45%, #1a3a5c 100%);
+  padding: var(--space-xl) 0;
+  text-align: center;
+}
+
+.cta-banner .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.cta-banner__heading {
+  font-family: var(--font-heading);
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  font-weight: 300;
+  color: var(--color-white);
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+.cta-banner__btn {
+  font-size: 1rem;
+  padding: 0.8rem 2rem;
+}
+
 /* ── Page title ──────────────────────────────────────────────────────────
    Applied to the <h1> in home_page.html and standard_page.html.
    Size, weight, font, and colour are controlled by CSS variables in
@@ -13,7 +41,6 @@
   color:       var(--page-title-color);
   margin:      var(--page-title-margin);
   line-height: var(--line-height);
-  text-align:  center;
 }
 
 /* Rich-text content inside the title (from page.rich_title) inherits the
@@ -31,26 +58,166 @@
   width: 100%;
 }
 
-/* Home page — hero often goes full-width, no container padding */
+/* ── Consistent reading width — content pages use 48rem ── */
+body.page-standard .site-main,
+body.page-blog-index .site-main .container,
+body.page-blog-post .site-main,
+body.page-contact .site-main {
+  max-width: 48rem;
+  margin-inline: auto;
+}
+
+/* Home page — transparent floating header over the shader */
+body.page-home .site-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.15) 70%, transparent 100%);
+  z-index: 10;
+}
+
+/* Home page — full-width dark layout */
 body.page-home .site-main {
   padding-block: 0;
 }
 
-/* Blog index — full-width site-main so the subheader strip spans the viewport;
-   narrow column applied only to the content container inside site-main,
-   leaving the header and footer containers unaffected. */
-body.page-blog-index .site-main .container {
-  max-width: 48rem;
-  margin-inline: auto;
+body.page-home .site-main .container {
+  padding-block: var(--space-xl);
 }
 
-/* Blog post pages — narrow reading column on site-main (no full-width subheader) */
-body.page-blog-post .site-main {
-  max-width: 48rem;
-  margin-inline: auto;
+/* Intro: prominent statement, not body copy */
+body.page-home .intro {
+  font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+  font-weight: 300;
+  line-height: 1.85;
+  color: rgba(226, 232, 240, 0.82);
+  max-width: 44rem;
+}
+
+body.page-home .intro p:last-child {
+  margin-bottom: 0;
+}
+
+/* Headings in body blocks stay white on dark */
+body.page-home .site-main h1,
+body.page-home .site-main h2,
+body.page-home .site-main h3,
+body.page-home .site-main h4 {
+  color: #ffffff;
+}
+
+/* Horizontal rules match the accent colour */
+body.page-home .site-main hr {
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 /* Portfolio page — light grey background */
 body.page-portfolio .site-main {
   background-color: var(--color-gray-light);
 }
+
+/* ── Contact page ─────────────────────────────────────────────────────────── */
+
+/* ── Form fields ── */
+.contact-form {
+  width: 100%;
+  text-align: left;
+}
+
+.contact-form .form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.35rem;
+  margin-bottom: 1.25rem;
+  text-align: left;
+}
+
+.contact-form label {
+  display: block;
+  text-align: left;
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--color-brand-primary);
+}
+
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: 1.5px solid #dde3ea;
+  border-radius: var(--border-radius);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  background: #fafbfc;
+  color: var(--body-text);
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  box-sizing: border-box;
+  display: block;
+}
+
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--color-brand-accent);
+  background: var(--color-white);
+  box-shadow: 0 0 0 3px rgba(224, 123, 57, 0.15);
+}
+
+.contact-form textarea {
+  min-height: 9rem;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.contact-form .form-group.has-error input,
+.contact-form .form-group.has-error textarea,
+.contact-form .form-group.has-error select {
+  border-color: #c0392b;
+  background: #fff8f7;
+}
+
+.contact-form .form-error {
+  color: #c0392b;
+  font-size: 0.82rem;
+  font-family: var(--font-heading);
+}
+
+.contact-form .form-help {
+  color: var(--color-gray-dark);
+  font-size: 0.82rem;
+  font-family: var(--font-heading);
+}
+
+/* ── Submit row ── */
+.contact-form__footer {
+  margin-top: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid #eef0f3;
+}
+
+.contact-form__submit-btn {
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.contact-form__submit-btn:active {
+  transform: translateY(1px);
+}
+
+/* ── Thank-you page ── */
+.contact-thankyou {
+  margin-top: var(--space-lg);
+}
+
