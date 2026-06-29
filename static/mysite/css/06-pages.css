@@ -118,6 +118,11 @@ body.page-portfolio .site-main {
 }
 
 /* ── Contact page ─────────────────────────────────────────────────────────── */
+body.page-contact,
+body.page-contact .site-main {
+  background-color: #faf7f2;
+}
+
 
 /* ── Form fields ── */
 .contact-form {
