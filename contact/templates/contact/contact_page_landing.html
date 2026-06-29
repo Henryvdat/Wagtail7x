@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags nav_tags %}
+
+{% block body_class %}page-contact page-contact--landing{% endblock %}
+
+{% block page_theme %}
+<style>
+  :root {
+    --body-bg:   #faf8f4;
+    --body-text: #1a1a1a;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1 class="page-title">{{ page.title }}</h1>
+<hr class="title-rule">
+
+<div class="contact-thank-you">
+  {% if page.thank_you_text %}
+  {{ page.thank_you_text|richtext }}
+  {% else %}
+  <p>Thank you for getting in touch! We'll be in contact shortly.</p>
+  {% endif %}
+</div>
+{% endblock %}

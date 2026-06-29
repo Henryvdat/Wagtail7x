@@ -53,3 +53,75 @@ body.page-blog-post .site-main {
 body.page-portfolio .site-main {
   background-color: var(--color-gray-light);
 }
+
+/* ── Contact page ─────────────────────────────────────────────────────────── */
+body.page-contact .site-main {
+  max-width: 48rem;
+  margin-inline: auto;
+}
+
+.contact-form-wrapper {
+  margin-top: var(--space-md);
+}
+
+.contact-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: var(--space-md);
+}
+
+.contact-form label {
+  font-weight: 600;
+  color: var(--body-text, #1a1a1a);
+}
+
+.contact-form input[type="text"],
+.contact-form input[type="email"],
+.contact-form input[type="tel"],
+.contact-form input[type="url"],
+.contact-form select,
+.contact-form textarea {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--color-gray-mid);
+  border-radius: var(--border-radius, 4px);
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  background: var(--color-white);
+  color: var(--body-text, #1a1a1a);
+  transition: border-color 0.15s;
+}
+
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--color-brand-accent);
+  box-shadow: 0 0 0 3px rgba(224, 123, 57, 0.15);
+}
+
+.contact-form textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+.contact-form .form-group.has-error input,
+.contact-form .form-group.has-error textarea,
+.contact-form .form-group.has-error select {
+  border-color: #c0392b;
+}
+
+.contact-form .form-error {
+  color: #c0392b;
+  font-size: 0.875rem;
+}
+
+.contact-form .form-help {
+  color: var(--color-gray-dark);
+  font-size: 0.85rem;
+}
+
+.contact-thank-you {
+  margin-top: var(--space-md);
+}
