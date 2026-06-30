@@ -28,8 +28,7 @@
 {# ── Subheader strip — lives OUTSIDE .container so it's naturally full-width ── #}
 {% block precontent %}
     {% if page.subheader_bg_color or page.subheader_image %}
-    <div class="page-subheader"
-         style="background-color: {{ page.subheader_bg_color|default:'transparent' }};">
+    <div class="page-subheader"{% if page.subheader_bg_color %} style="background-color: {{ page.subheader_bg_color }};"{% endif %}>
         {% if page.subheader_image %}
             {% image page.subheader_image original as sub_img %}
             <img class="page-subheader__image"
