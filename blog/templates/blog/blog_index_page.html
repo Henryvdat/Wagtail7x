@@ -14,7 +14,7 @@
   /* Blog section — warm editorial theme override
      Overrides the default navy/orange palette from 01-settings.css */
   :root {
-    --header-bg:          {{ page.header_bg_color|default:'#2d4a3e' }};  /* set in admin → Header & subheader strip */
+    {% if page.header_bg_color %}--header-bg: {{ page.header_bg_color }};{% endif %}  /* set in admin → Header & subheader strip */
     --header-link-hover:  #f5c87a;   /* warm gold */
     --body-bg:            #faf7f2;   /* warm linen */
     --body-text:          #2c2416;   /* warm near-black */
