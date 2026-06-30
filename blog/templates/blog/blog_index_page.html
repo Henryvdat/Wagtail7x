@@ -3,7 +3,6 @@
 {% load static wagtailcore_tags wagtailimages_tags nav_tags %}
 
 {% block body_class %}page-blog-index{% endblock %}
-{% block main_class %}{% if page.subheader_bg_color or page.subheader_image %}subheader-flush{% endif %}{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'mysite/css/pages/blog.css' %}">
@@ -11,32 +10,16 @@
 
 {% block page_theme %}
 <style>
-  /* Blog section — warm editorial theme override
-     Overrides the default navy/orange palette from 01-settings.css */
+  /* Blog section — warm editorial theme.
+     Header stays site-default navy; body and footer use the warm palette. */
   :root {
-    {% if page.header_bg_color %}--header-bg: {{ page.header_bg_color }};{% endif %}  /* set in admin → Header & subheader strip */
-    --header-link-hover:  #f5c87a;   /* warm gold */
-    --body-bg:            #faf7f2;   /* warm linen */
-    --body-text:          #2c2416;   /* warm near-black */
-    --body-link:          #2d4a3e;   /* forest green */
-    --body-link-hover:    #c8813a;   /* warm amber */
-    --footer-bg:          #2d4a3e;   /* forest green */
+    --body-bg:         #faf7f2;   /* warm linen */
+    --body-text:       #2c2416;   /* warm near-black */
+    --body-link:       #2d4a3e;   /* forest green */
+    --body-link-hover: #c8813a;   /* warm amber */
+    --footer-bg:       #2d4a3e;   /* forest green */
   }
 </style>
-{% endblock %}
-
-{# ── Subheader strip — lives OUTSIDE .container so it's naturally full-width ── #}
-{% block precontent %}
-    {% if page.subheader_bg_color or page.subheader_image %}
-    <div class="page-subheader"{% if page.subheader_bg_color %} style="background-color: {{ page.subheader_bg_color }};"{% endif %}>
-        {% if page.subheader_image %}
-            {% image page.subheader_image original as sub_img %}
-            <img class="page-subheader__image"
-                 src="{{ sub_img.url }}"
-                 alt="{{ sub_img.alt }}">
-        {% endif %}
-    </div>
-    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -44,7 +27,7 @@
     <h1 class="page-title">{{ page.title }}</h1>
     <hr class="title-rule">
 
-    {# ── Intro text (below the strip, above the post listing) ── #}
+    {# ── Intro / subheader text ── #}
     {% if page.subheader_text %}
     <div class="blog-subheader-text">
         {{ page.subheader_text|richtext }}
