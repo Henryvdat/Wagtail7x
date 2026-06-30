@@ -37,37 +37,11 @@ class BlogIndexPage(Page):
                   "Applied behind the thumbnail on the index listing only.",
     )
 
-    # ── Header & subheader strip ─────────────────────────────
-    header_bg_color = models.CharField(
-        max_length=32,
-        blank=True,
-        default="",
-        verbose_name="Header background colour",
-        help_text="Overrides the nav bar background colour on this page. "
-                  "Any valid CSS colour. Leave blank for the site default.",
-    )
-    subheader_bg_color = models.CharField(
-        max_length=32,
-        blank=True,
-        default="",
-        verbose_name="Subheader background colour",
-        help_text="Any valid CSS colour: hex (#1a2b3c), rgb(), named colour, etc. Leave blank to hide the subheader strip.",
-    )
-    subheader_image = models.ForeignKey(
-        get_image_model_string(),
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-        verbose_name="Subheader image",
-        help_text="Centred image displayed inside the coloured subheader strip.",
-    )
-
-    # ── Intro text (below the strip) ─────────────────────────
+    # ── Intro text ───────────────────────────────────────────
     subheader_text = RichTextField(
         blank=True,
         verbose_name="Intro text",
-        help_text="Text displayed below the subheader strip, above the post listing.",
+        help_text="Text displayed below the page title, above the post listing.",
     )
 
     # ── Legacy fields ─────────────────────────────────────────
@@ -81,15 +55,6 @@ class BlogIndexPage(Page):
                 FieldPanel("card_image_bg_color"),
             ],
             heading="Card appearance",
-            classname="collapsible",
-        ),
-        MultiFieldPanel(
-            [
-                FieldPanel("header_bg_color"),
-                FieldPanel("subheader_bg_color"),
-                FieldPanel("subheader_image"),
-            ],
-            heading="Header & subheader strip",
             classname="collapsible",
         ),
         FieldPanel("subheader_text"),
