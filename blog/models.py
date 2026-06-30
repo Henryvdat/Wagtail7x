@@ -49,9 +49,9 @@ class BlogIndexPage(Page):
     subheader_bg_color = models.CharField(
         max_length=32,
         blank=True,
-        default="#2d4a3e",
+        default="",
         verbose_name="Subheader background colour",
-        help_text="Any valid CSS colour: hex (#1a2b3c), rgb(), named colour, etc.",
+        help_text="Any valid CSS colour: hex (#1a2b3c), rgb(), named colour, etc. Leave blank to hide the subheader strip.",
     )
     subheader_image = models.ForeignKey(
         get_image_model_string(),

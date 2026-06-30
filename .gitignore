@@ -13,6 +13,7 @@ db.sqlite3
 media/
 *.log
 local_settings.py
+mysite/settings/local.py
 
 # Virtual environment
 venv/
